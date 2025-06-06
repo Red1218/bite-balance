@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Plus, Search } from "lucide-react";
+import { ArrowLeft, Plus, Search, Edit, Trash2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const SavedMeals = () => {
@@ -16,7 +16,7 @@ const SavedMeals = () => {
   const savedMeals = [
     {
       id: 1,
-      name: "Greek Yogurt with Berries",
+      name: "🥣 Greek Yogurt with Berries",
       calories: 180,
       protein: 15,
       carbs: 20,
@@ -26,7 +26,7 @@ const SavedMeals = () => {
     },
     {
       id: 2,
-      name: "Grilled Chicken Breast",
+      name: "🍗 Grilled Chicken Breast",
       calories: 250,
       protein: 45,
       carbs: 0,
@@ -36,7 +36,7 @@ const SavedMeals = () => {
     },
     {
       id: 3,
-      name: "Avocado Toast",
+      name: "🥑 Avocado Toast",
       calories: 320,
       protein: 8,
       carbs: 30,
@@ -46,7 +46,7 @@ const SavedMeals = () => {
     },
     {
       id: 4,
-      name: "Protein Smoothie",
+      name: "🥤 Protein Smoothie",
       calories: 280,
       protein: 30,
       carbs: 25,
@@ -69,8 +69,25 @@ const SavedMeals = () => {
     });
   };
 
+  const handleEditMeal = (meal: any) => {
+    console.log("Editing meal:", meal);
+    toast({
+      title: "Edit Meal",
+      description: `Editing ${meal.name}. Feature coming soon!`,
+    });
+  };
+
+  const handleDeleteMeal = (meal: any) => {
+    console.log("Deleting meal:", meal);
+    toast({
+      title: "Meal Deleted",
+      description: `${meal.name} has been removed from saved meals.`,
+      variant: "destructive"
+    });
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl">
       {/* Header */}
       <div className="flex items-center gap-4">
         <Link to="/">
@@ -78,7 +95,7 @@ const SavedMeals = () => {
             <ArrowLeft className="w-4 h-4" />
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Saved Meals</h1>
+        <h1 className="text-3xl font-bold text-gray-900">💾 Saved Meals</h1>
       </div>
 
       {/* Search */}
@@ -99,13 +116,33 @@ const SavedMeals = () => {
       {/* Saved Meals Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredMeals.map((meal) => (
-          <Card key={meal.id} className="hover:shadow-lg transition-shadow">
-            <CardHeader>
-              <CardTitle className="text-lg">{meal.name}</CardTitle>
+          <Card key={meal.id} className="hover:shadow-lg transition-all duration-200 border-gray-200">
+            <CardHeader className="pb-3">
+              <div className="flex items-start justify-between">
+                <CardTitle className="text-lg leading-tight">{meal.name}</CardTitle>
+                <div className="flex gap-1 ml-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleEditMeal(meal)}
+                    className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 h-8 w-8 p-0"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeleteMeal(meal)}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 h-8 w-8 p-0"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {meal.tags.map((tag, index) => (
                   <Badge key={index} variant="secondary" className="text-xs">
-                    {tag}
+                    🏷️ {tag}
                   </Badge>
                 ))}
               </div>
@@ -118,30 +155,42 @@ const SavedMeals = () => {
 
               <div className="grid grid-cols-3 gap-2 text-center text-sm">
                 <div>
-                  <div className="font-semibold">{meal.protein}g</div>
+                  <div className="font-semibold text-red-500">{meal.protein}g</div>
                   <div className="text-gray-600">Protein</div>
                 </div>
                 <div>
-                  <div className="font-semibold">{meal.carbs}g</div>
+                  <div className="font-semibold text-blue-500">{meal.carbs}g</div>
                   <div className="text-gray-600">Carbs</div>
                 </div>
                 <div>
-                  <div className="font-semibold">{meal.fat}g</div>
+                  <div className="font-semibold text-yellow-500">{meal.fat}g</div>
                   <div className="text-gray-600">Fat</div>
                 </div>
               </div>
 
               {meal.notes && (
-                <p className="text-sm text-gray-600 italic">{meal.notes}</p>
+                <p className="text-sm text-gray-600 italic bg-gray-50 p-2 rounded">
+                  📝 {meal.notes}
+                </p>
               )}
 
-              <Button 
-                onClick={() => handleQuickAdd(meal)}
-                className="w-full bg-red-500 hover:bg-red-600 text-white"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                Quick Add
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={() => handleQuickAdd(meal)}
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add to Today
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="px-3"
+                  title="Quick add with time selection"
+                >
+                  <Clock className="w-4 h-4" />
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ))}
