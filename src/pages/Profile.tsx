@@ -1,28 +1,57 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Save, Calculator } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Calculator, Save, User } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const Profile = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    age: "28",
-    weight: "75",
-    height: "175",
+    name: "",
+    age: "",
+    weight: "",
+    height: "",
     activityLevel: "active",
     gender: "male",
     goal: "maintain"
   });
 
   const [calculatedGoal, setCalculatedGoal] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  // Load profile data
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      if (data) {
+        setProfile({
+          name: data.name || "",
+          age: data.age?.toString() || "",
+          weight: data.weight?.toString() || "",
+          height: data.height?.toString() || "",
+          activityLevel: "active",
+          gender: "male",
+          goal: "maintain"
+        });
+      }
+    };
+
+    loadProfile();
+  }, [user]);
 
   const calculateCalorieGoal = () => {
     const weight = parseFloat(profile.weight);
@@ -59,35 +88,59 @@ const Profile = () => {
     let goalCalories = tdee;
     switch (profile.goal) {
       case "lose":
-        goalCalories = tdee - 500; // 1 lb per week deficit
+        goalCalories = tdee - 500;
         break;
       case "gain":
-        goalCalories = tdee + 500; // 1 lb per week surplus
+        goalCalories = tdee + 500;
         break;
       default:
-        goalCalories = tdee; // maintain
+        goalCalories = tdee;
     }
 
     setCalculatedGoal(Math.round(goalCalories));
   };
 
-  const handleSave = () => {
-    console.log("Saving profile:", profile);
-    toast({
-      title: "Profile Updated!",
-      description: "Your profile information has been saved successfully.",
-    });
+  const handleSave = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          name: profile.name,
+          age: parseInt(profile.age) || null,
+          weight: parseFloat(profile.weight) || null,
+          height: parseFloat(profile.height) || null,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Profile Updated!",
+        description: "Your profile information has been saved successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to save profile. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link to="/">
-          <Button variant="outline" size="icon">
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-        </Link>
+        <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center">
+          <User className="w-6 h-6 text-white" />
+        </div>
         <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
       </div>
 
@@ -264,9 +317,13 @@ const Profile = () => {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} className="bg-red-500 hover:bg-red-600 text-white">
+        <Button 
+          onClick={handleSave} 
+          className="bg-red-500 hover:bg-red-600 text-white"
+          disabled={loading}
+        >
           <Save className="w-4 h-4 mr-2" />
-          Save Profile
+          {loading ? 'Saving...' : 'Save Profile'}
         </Button>
       </div>
     </div>
