@@ -10,13 +10,12 @@ import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff, Heart } from 'lucide-react';
 
 const motivationalQuotes = [
-  "Consistency over intensity.",
   "A healthier you starts today.",
-  "Small steps make a big difference.",
+  "Track what fuels you.",
+  "Small habits, big change.",
+  "Consistency over intensity.",
   "Every bite counts.",
-  "You don't have to be extreme, just consistent.",
-  "Eat to fuel your body, not your emotions.",
-  "Progress, not perfection."
+  "Fuel better, live better."
 ];
 
 const AuthLanding = () => {
@@ -67,9 +66,19 @@ const AuthLanding = () => {
           });
         } else {
           toast({
-            title: "Welcome to CalTracker!",
-            description: "Your account has been created successfully.",
+            title: "Account created!",
+            description: "Please sign in to continue.",
           });
+          // Reset form and switch to sign in
+          setFormData({
+            email: formData.email, // Keep email for convenience
+            password: '',
+            name: '',
+            age: '',
+            weight: '',
+            height: ''
+          });
+          setActiveTab("signin");
         }
       } else {
         const { error } = await signIn(formData.email, formData.password);
@@ -113,8 +122,8 @@ const AuthLanding = () => {
               <Heart className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">CalTracker</h1>
-              <p className="text-gray-600">Track. Eat. Repeat.</p>
+              <h1 className="text-3xl font-bold text-gray-900">BiteBalance</h1>
+              <p className="text-gray-600">Fuel Better, Live Better</p>
             </div>
           </div>
           
@@ -131,7 +140,7 @@ const AuthLanding = () => {
         <Card className="w-full max-w-md mx-auto shadow-xl border-red-100">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center">
-              Welcome to CalTracker
+              Welcome to BiteBalance
             </CardTitle>
             <p className="text-center text-gray-600">
               Start your healthy journey today
@@ -282,7 +291,7 @@ const AuthLanding = () => {
                     className="w-full bg-red-500 hover:bg-red-600"
                     disabled={loading}
                   >
-                    {loading ? 'Creating Account...' : 'Create Account'}
+                    {loading ? 'Creating Account...' : 'Create My Account'}
                   </Button>
                 </form>
               </TabsContent>

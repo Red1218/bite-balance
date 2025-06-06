@@ -89,8 +89,8 @@ const Sidebar = () => {
                   <Heart className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold text-gray-900">CalTracker</h1>
-                  <p className="text-xs text-gray-500">Track. Eat. Repeat.</p>
+                  <h1 className="text-xl font-bold text-gray-900">BiteBalance</h1>
+                  <p className="text-xs text-gray-500">Fuel Better, Live Better</p>
                 </div>
               </div>
             ) : (
