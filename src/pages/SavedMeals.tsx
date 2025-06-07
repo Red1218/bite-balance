@@ -4,87 +4,57 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Plus, Search, Edit, Trash2, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useSavedMeals } from "@/hooks/useSavedMeals";
+import { useDailyMeals } from "@/hooks/useDailyMeals";
+import EditMealDialog from "@/components/EditMealDialog";
 
 const SavedMeals = () => {
-  const { toast } = useToast();
+  const { meals: savedMeals, loading, updateMeal, deleteMeal } = useSavedMeals();
+  const { addMealFromSaved } = useDailyMeals();
   const [searchTerm, setSearchTerm] = useState("");
-
-  // Mock saved meals data
-  const savedMeals = [
-    {
-      id: 1,
-      name: "🥣 Greek Yogurt with Berries",
-      calories: 180,
-      protein: 15,
-      carbs: 20,
-      fat: 5,
-      tags: ["Protein", "Healthy", "Quick"],
-      notes: "Perfect for breakfast or snack"
-    },
-    {
-      id: 2,
-      name: "🍗 Grilled Chicken Breast",
-      calories: 250,
-      protein: 45,
-      carbs: 0,
-      fat: 6,
-      tags: ["Protein", "Lean", "Dinner"],
-      notes: "Plain grilled chicken, 6oz serving"
-    },
-    {
-      id: 3,
-      name: "🥑 Avocado Toast",
-      calories: 320,
-      protein: 8,
-      carbs: 30,
-      fat: 22,
-      tags: ["Healthy Fat", "Breakfast", "Fiber"],
-      notes: "Whole grain bread with half avocado"
-    },
-    {
-      id: 4,
-      name: "🥤 Protein Smoothie",
-      calories: 280,
-      protein: 30,
-      carbs: 25,
-      fat: 8,
-      tags: ["Protein", "Post-workout", "Quick"],
-      notes: "Protein powder, banana, and almond milk"
-    }
-  ];
+  const [editingMeal, setEditingMeal] = useState<any>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const filteredMeals = savedMeals.filter(meal =>
     meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    meal.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+    meal.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  const handleQuickAdd = (meal: any) => {
-    console.log("Adding meal:", meal);
-    toast({
-      title: "Meal Added!",
-      description: `${meal.name} has been added to today's log.`,
-    });
+  const handleQuickAdd = async (meal: any) => {
+    await addMealFromSaved(meal);
   };
 
   const handleEditMeal = (meal: any) => {
-    console.log("Editing meal:", meal);
-    toast({
-      title: "Edit Meal",
-      description: `Editing ${meal.name}. Feature coming soon!`,
-    });
+    setEditingMeal(meal);
+    setIsEditDialogOpen(true);
   };
 
-  const handleDeleteMeal = (meal: any) => {
-    console.log("Deleting meal:", meal);
-    toast({
-      title: "Meal Deleted",
-      description: `${meal.name} has been removed from saved meals.`,
-      variant: "destructive"
-    });
+  const handleDeleteMeal = async (meal: any) => {
+    if (window.confirm(`Are you sure you want to delete "${meal.name}"?`)) {
+      await deleteMeal(meal.id);
+    }
   };
+
+  const handleSaveMeal = async (updates: any) => {
+    if (editingMeal) {
+      await updateMeal(editingMeal.id, updates);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-6 max-w-7xl">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="w-8 h-8 bg-red-500 rounded-full animate-pulse mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading saved meals...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-7xl">
@@ -140,7 +110,7 @@ const SavedMeals = () => {
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
-                {meal.tags.map((tag, index) => (
+                {meal.tags?.map((tag, index) => (
                   <Badge key={index} variant="secondary" className="text-xs">
                     🏷️ {tag}
                   </Badge>
@@ -155,15 +125,15 @@ const SavedMeals = () => {
 
               <div className="grid grid-cols-3 gap-2 text-center text-sm">
                 <div>
-                  <div className="font-semibold text-red-500">{meal.protein}g</div>
+                  <div className="font-semibold text-red-500">{Math.round(meal.protein || 0)}g</div>
                   <div className="text-gray-600">Protein</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-blue-500">{meal.carbs}g</div>
+                  <div className="font-semibold text-blue-500">{Math.round(meal.carbs || 0)}g</div>
                   <div className="text-gray-600">Carbs</div>
                 </div>
                 <div>
-                  <div className="font-semibold text-yellow-500">{meal.fat}g</div>
+                  <div className="font-semibold text-yellow-500">{Math.round(meal.fat || 0)}g</div>
                   <div className="text-gray-600">Fat</div>
                 </div>
               </div>
@@ -187,6 +157,7 @@ const SavedMeals = () => {
                   size="sm"
                   className="px-3"
                   title="Quick add with time selection"
+                  onClick={() => handleQuickAdd(meal)}
                 >
                   <Clock className="w-4 h-4" />
                 </Button>
@@ -199,7 +170,9 @@ const SavedMeals = () => {
       {filteredMeals.length === 0 && (
         <Card>
           <CardContent className="text-center py-12">
-            <p className="text-gray-600 mb-4">No saved meals found matching your search.</p>
+            <p className="text-gray-600 mb-4">
+              {searchTerm ? "No saved meals found matching your search." : "No saved meals yet."}
+            </p>
             <Link to="/add-meal">
               <Button className="bg-red-500 hover:bg-red-600 text-white">
                 <Plus className="w-4 h-4 mr-2" />
@@ -209,6 +182,14 @@ const SavedMeals = () => {
           </CardContent>
         </Card>
       )}
+
+      <EditMealDialog
+        meal={editingMeal}
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        onSave={handleSaveMeal}
+        isDailyMeal={false}
+      />
     </div>
   );
 };
