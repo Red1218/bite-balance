@@ -9,13 +9,18 @@ import { Link } from "react-router-dom";
 import { useSavedMeals } from "@/hooks/useSavedMeals";
 import { useDailyMeals } from "@/hooks/useDailyMeals";
 import EditMealDialog from "@/components/EditMealDialog";
+import AddSavedMealForm from "@/components/AddSavedMealForm";
+import MealTimeSelector from "@/components/MealTimeSelector";
 
 const SavedMeals = () => {
-  const { meals: savedMeals, loading, updateMeal, deleteMeal } = useSavedMeals();
+  const { meals: savedMeals, loading, updateMeal, deleteMeal, refetch } = useSavedMeals();
   const { addMealFromSaved } = useDailyMeals();
   const [searchTerm, setSearchTerm] = useState("");
   const [editingMeal, setEditingMeal] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [selectedMealForToday, setSelectedMealForToday] = useState<any>(null);
+  const [isMealTimeSelectorOpen, setIsMealTimeSelectorOpen] = useState(false);
 
   const filteredMeals = savedMeals.filter(meal =>
     meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -23,7 +28,16 @@ const SavedMeals = () => {
   );
 
   const handleQuickAdd = async (meal: any) => {
-    await addMealFromSaved(meal);
+    setSelectedMealForToday(meal);
+    setIsMealTimeSelectorOpen(true);
+  };
+
+  const handleMealTimeSelect = async (mealTime: string) => {
+    if (selectedMealForToday) {
+      await addMealFromSaved(selectedMealForToday, mealTime);
+    }
+    setIsMealTimeSelectorOpen(false);
+    setSelectedMealForToday(null);
   };
 
   const handleEditMeal = (meal: any) => {
@@ -41,6 +55,11 @@ const SavedMeals = () => {
     if (editingMeal) {
       await updateMeal(editingMeal.id, updates);
     }
+  };
+
+  const handleMealAdded = () => {
+    setShowAddForm(false);
+    refetch();
   };
 
   if (loading) {
@@ -66,6 +85,16 @@ const SavedMeals = () => {
           </Button>
         </Link>
         <h1 className="text-3xl font-bold text-gray-900">💾 Saved Meals</h1>
+        <div className="ml-auto">
+          <Button 
+            onClick={() => setShowAddForm(true)}
+            className="bg-red-500 hover:bg-red-600 text-white"
+            disabled={showAddForm}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add New Meal
+          </Button>
+        </div>
       </div>
 
       {/* Search */}
@@ -82,6 +111,14 @@ const SavedMeals = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Add New Meal Form */}
+      {showAddForm && (
+        <AddSavedMealForm
+          onMealAdded={handleMealAdded}
+          onCancel={() => setShowAddForm(false)}
+        />
+      )}
 
       {/* Saved Meals Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -144,41 +181,31 @@ const SavedMeals = () => {
                 </p>
               )}
 
-              <div className="flex gap-2">
-                <Button 
-                  onClick={() => handleQuickAdd(meal)}
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white"
-                >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add to Today
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="px-3"
-                  title="Quick add with time selection"
-                  onClick={() => handleQuickAdd(meal)}
-                >
-                  <Clock className="w-4 h-4" />
-                </Button>
-              </div>
+              <Button 
+                onClick={() => handleQuickAdd(meal)}
+                className="w-full bg-red-500 hover:bg-red-600 text-white"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add to Today
+              </Button>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {filteredMeals.length === 0 && (
+      {filteredMeals.length === 0 && !showAddForm && (
         <Card>
           <CardContent className="text-center py-12">
             <p className="text-gray-600 mb-4">
               {searchTerm ? "No saved meals found matching your search." : "No saved meals yet."}
             </p>
-            <Link to="/add-meal">
-              <Button className="bg-red-500 hover:bg-red-600 text-white">
-                <Plus className="w-4 h-4 mr-2" />
-                Add New Meal
-              </Button>
-            </Link>
+            <Button 
+              onClick={() => setShowAddForm(true)}
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Your First Meal
+            </Button>
           </CardContent>
         </Card>
       )}
@@ -189,6 +216,13 @@ const SavedMeals = () => {
         onOpenChange={setIsEditDialogOpen}
         onSave={handleSaveMeal}
         isDailyMeal={false}
+      />
+
+      <MealTimeSelector
+        open={isMealTimeSelectorOpen}
+        onOpenChange={setIsMealTimeSelectorOpen}
+        onSelect={handleMealTimeSelect}
+        mealName={selectedMealForToday?.name || ""}
       />
     </div>
   );

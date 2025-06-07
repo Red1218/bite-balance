@@ -8,10 +8,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Save } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const AddMeal = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [mealData, setMealData] = useState({
     name: "",
     mealTime: "",
@@ -23,26 +28,74 @@ const AddMeal = () => {
     notes: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Meal data:", mealData);
     
-    toast({
-      title: "Meal Added!",
-      description: `${mealData.name} has been added to your log.`,
-    });
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to add meals",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!mealData.name || !mealData.mealTime || !mealData.calories) {
+      toast({
+        title: "Error", 
+        description: "Please fill in all required fields",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setLoading(true);
     
-    // Reset form
-    setMealData({
-      name: "",
-      mealTime: "",
-      calories: "",
-      protein: "",
-      carbs: "",
-      fat: "",
-      date: new Date().toISOString().split('T')[0],
-      notes: ""
-    });
+    try {
+      const { error } = await supabase
+        .from('daily_meals')
+        .insert({
+          user_id: user.id,
+          name: mealData.name,
+          calories: Number(mealData.calories),
+          protein: Number(mealData.protein) || 0,
+          carbs: Number(mealData.carbs) || 0,
+          fat: Number(mealData.fat) || 0,
+          meal_time: mealData.mealTime,
+          logged_date: mealData.date
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Meal Added!",
+        description: `${mealData.name} has been added to your daily log.`,
+      });
+      
+      // Reset form
+      setMealData({
+        name: "",
+        mealTime: "",
+        calories: "",
+        protein: "",
+        carbs: "",
+        fat: "",
+        date: new Date().toISOString().split('T')[0],
+        notes: ""
+      });
+
+      // Navigate back to dashboard
+      navigate("/");
+    } catch (error) {
+      console.error('Error adding meal:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add meal. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,7 +107,7 @@ const AddMeal = () => {
             <ArrowLeft className="w-4 h-4" />
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Add Meal</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Add Meal to Today</h1>
       </div>
 
       <Card>
@@ -80,6 +133,7 @@ const AddMeal = () => {
                 <Select 
                   value={mealData.mealTime} 
                   onValueChange={(value) => setMealData({ ...mealData, mealTime: value })}
+                  required
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select meal time" />
@@ -126,6 +180,7 @@ const AddMeal = () => {
                   <Input
                     id="protein"
                     type="number"
+                    step="0.1"
                     value={mealData.protein}
                     onChange={(e) => setMealData({ ...mealData, protein: e.target.value })}
                     placeholder="0"
@@ -137,6 +192,7 @@ const AddMeal = () => {
                   <Input
                     id="carbs"
                     type="number"
+                    step="0.1"
                     value={mealData.carbs}
                     onChange={(e) => setMealData({ ...mealData, carbs: e.target.value })}
                     placeholder="0"
@@ -148,6 +204,7 @@ const AddMeal = () => {
                   <Input
                     id="fat"
                     type="number"
+                    step="0.1"
                     value={mealData.fat}
                     onChange={(e) => setMealData({ ...mealData, fat: e.target.value })}
                     placeholder="0"
@@ -156,21 +213,14 @@ const AddMeal = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
-              <Textarea
-                id="notes"
-                value={mealData.notes}
-                onChange={(e) => setMealData({ ...mealData, notes: e.target.value })}
-                placeholder="Any additional notes about this meal..."
-                rows={3}
-              />
-            </div>
-
             <div className="flex gap-4">
-              <Button type="submit" className="bg-red-500 hover:bg-red-600 text-white flex-1">
+              <Button 
+                type="submit" 
+                className="bg-red-500 hover:bg-red-600 text-white flex-1"
+                disabled={loading}
+              >
                 <Save className="w-4 h-4 mr-2" />
-                Save Meal
+                {loading ? "Adding..." : "Add to Today"}
               </Button>
               <Link to="/saved-meals" className="flex-1">
                 <Button type="button" variant="outline" className="w-full">
