@@ -2,11 +2,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Plus, Target, Flame, Apple, Edit, Trash2 } from "lucide-react";
+import { Plus, Flame, Edit, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDailyMeals } from "@/hooks/useDailyMeals";
 import EditMealDialog from "@/components/EditMealDialog";
+import StepsSection from "@/components/StepsSection";
 
 const Dashboard = () => {
   const { meals, loading, totals, updateMeal, deleteMeal } = useDailyMeals();
@@ -17,20 +18,6 @@ const Dashboard = () => {
   const dailyGoal = 2200;
 
   const progressPercentage = (totals.calories / dailyGoal) * 100;
-  const remaining = Math.max(0, dailyGoal - totals.calories);
-  
-  const getProgressColor = () => {
-    if (progressPercentage < 70) return "bg-green-500";
-    if (progressPercentage < 90) return "bg-yellow-500"; 
-    return "bg-red-500";
-  };
-
-  const getStatusText = () => {
-    if (progressPercentage < 70) return "On Track";
-    if (progressPercentage < 90) return "Close to Goal";
-    if (progressPercentage < 110) return "At Goal";
-    return "Over Goal";
-  };
 
   const handleEditMeal = (meal: any) => {
     setEditingMeal(meal);
@@ -91,55 +78,8 @@ const Dashboard = () => {
         </Link>
       </div>
 
-      {/* Progress Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">🔢 Calories Consumed</CardTitle>
-            <Flame className="h-4 w-4 text-red-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{Math.round(totals.calories)}</div>
-            <p className="text-xs text-muted-foreground">of {dailyGoal} goal</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">🎯 Remaining</CardTitle>
-            <Target className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{Math.round(remaining)}</div>
-            <p className="text-xs text-muted-foreground">calories left</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">📊 Progress</CardTitle>
-            <Apple className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{Math.round(progressPercentage)}%</div>
-            <p className="text-xs text-muted-foreground">{getStatusText()}</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">✅ Status</CardTitle>
-            <div className={`h-3 w-3 rounded-full ${getProgressColor()}`}></div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{getStatusText()}</div>
-            <p className="text-xs text-muted-foreground">current status</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Calorie Progress Bar */}
-      <Card>
+      {/* Daily Progress Bar */}
+      <Card className="animate-fade-in">
         <CardHeader>
           <CardTitle>Daily Progress</CardTitle>
         </CardHeader>
@@ -155,7 +95,7 @@ const Dashboard = () => {
       </Card>
 
       {/* Macronutrients */}
-      <Card>
+      <Card className="animate-fade-in">
         <CardHeader>
           <CardTitle>Macronutrients</CardTitle>
         </CardHeader>
@@ -177,8 +117,13 @@ const Dashboard = () => {
         </CardContent>
       </Card>
 
+      {/* Steps Section */}
+      <div className="animate-fade-in">
+        <StepsSection />
+      </div>
+
       {/* Today's Meals */}
-      <Card>
+      <Card className="animate-fade-in">
         <CardHeader>
           <CardTitle>📌 Today's Meals</CardTitle>
         </CardHeader>
@@ -195,8 +140,15 @@ const Dashboard = () => {
             </div>
           ) : (
             <div className="space-y-4">
-              {meals.map((meal) => (
-                <div key={meal.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              {meals.map((meal, index) => (
+                <div 
+                  key={meal.id} 
+                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-300 animate-fade-in hover-scale"
+                  style={{ 
+                    animationDelay: `${index * 100}ms`,
+                    animationFillMode: 'both'
+                  }}
+                >
                   <div className="flex-1">
                     <h3 className="font-medium">{meal.name}</h3>
                     <p className="text-sm text-gray-600">{formatMealTime(meal.meal_time)}</p>
@@ -215,7 +167,7 @@ const Dashboard = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEditMeal(meal)}
-                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200"
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
@@ -223,7 +175,7 @@ const Dashboard = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDeleteMeal(meal.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
