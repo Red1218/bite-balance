@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
@@ -17,10 +17,14 @@ import {
   X
 } from 'lucide-react';
 
-const Sidebar = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
   const location = useLocation();
   const { signOut } = useAuth();
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const navItems = [
     { path: "/", icon: Home, label: "Dashboard" },
@@ -35,55 +39,41 @@ const Sidebar = () => {
     await signOut();
   };
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
-
   return (
     <>
       {/* Mobile overlay */}
-      {!isCollapsed && (
+      {isOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
-          onClick={toggleSidebar}
+          onClick={onToggle}
         />
       )}
       
-      {/* Hamburger Menu Button */}
+      {/* Toggle Button */}
       <Button
-        onClick={toggleSidebar}
+        onClick={onToggle}
         variant="ghost"
         size="icon"
-        className="fixed top-4 left-4 z-50 md:hidden bg-white shadow-md hover:bg-gray-50"
+        className="fixed top-4 left-4 z-50 bg-white shadow-md hover:bg-gray-50"
       >
-        {isCollapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
-      </Button>
-
-      {/* Desktop toggle button */}
-      <Button
-        onClick={toggleSidebar}
-        variant="ghost"
-        size="icon"
-        className="fixed top-4 left-4 z-50 hidden md:flex bg-white shadow-md hover:bg-gray-50"
-      >
-        {isCollapsed ? <Menu className="w-5 h-5" /> : <X className="w-5 h-5" />}
+        {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </Button>
 
       {/* Sidebar */}
       <div className={cn(
         "fixed left-0 top-0 h-full bg-white border-r border-gray-200 shadow-lg z-50 transition-all duration-300 ease-in-out",
-        isCollapsed 
-          ? "-translate-x-full md:w-16 md:translate-x-0" 
-          : "w-64 translate-x-0"
+        isOpen 
+          ? "w-64 translate-x-0" 
+          : "w-16 -translate-x-full md:translate-x-0"
       )}>
         <div className="flex flex-col h-full">
           
           {/* Logo Section */}
           <div className={cn(
             "p-6 border-b border-gray-200 transition-all duration-300",
-            isCollapsed && "md:p-4"
+            !isOpen && "md:p-4"
           )}>
-            {!isCollapsed ? (
+            {isOpen ? (
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center">
                   <Heart className="w-5 h-5 text-white" />
@@ -116,26 +106,26 @@ const Sidebar = () => {
                     onClick={() => {
                       // Close sidebar on mobile after navigation
                       if (window.innerWidth < 768) {
-                        setIsCollapsed(true);
+                        onToggle();
                       }
                     }}
                     className={cn(
-                      "flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group",
+                      "flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group relative",
                       isActive
                         ? "bg-red-50 text-red-600 border-l-4 border-red-500 shadow-sm"
                         : "text-gray-600 hover:text-gray-900 hover:bg-gray-50",
-                      isCollapsed && "md:justify-center md:space-x-0"
+                      !isOpen && "md:justify-center md:space-x-0"
                     )}
-                    title={isCollapsed ? item.label : undefined}
+                    title={!isOpen ? item.label : undefined}
                   >
                     <Icon className={cn(
                       "w-5 h-5 flex-shrink-0", 
                       isActive ? "text-red-500" : "text-gray-400"
                     )} />
-                    {!isCollapsed && <span>{item.label}</span>}
+                    {isOpen && <span>{item.label}</span>}
                     
                     {/* Tooltip for collapsed state */}
-                    {isCollapsed && (
+                    {!isOpen && (
                       <div className="hidden md:block absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
                         {item.label}
                       </div>
@@ -152,16 +142,16 @@ const Sidebar = () => {
               onClick={handleSignOut}
               variant="ghost"
               className={cn(
-                "w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50 group",
-                isCollapsed && "md:justify-center"
+                "w-full justify-start text-gray-600 hover:text-red-600 hover:bg-red-50 group relative",
+                !isOpen && "md:justify-center"
               )}
-              title={isCollapsed ? "Sign Out" : undefined}
+              title={!isOpen ? "Sign Out" : undefined}
             >
               <LogOut className="w-5 h-5 mr-3 flex-shrink-0" />
-              {!isCollapsed && "Sign Out"}
+              {isOpen && "Sign Out"}
               
               {/* Tooltip for collapsed state */}
-              {isCollapsed && (
+              {!isOpen && (
                 <div className="hidden md:block absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
                   Sign Out
                 </div>
