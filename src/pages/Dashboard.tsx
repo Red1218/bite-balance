@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useDailyMeals } from "@/hooks/useDailyMeals";
 import EditMealDialog from "@/components/EditMealDialog";
 import StepsSection from "@/components/StepsSection";
+import MacronutrientsTracker from "@/components/MacronutrientsTracker";
 import { useToast } from "@/hooks/use-toast";
 
 const Dashboard = () => {
@@ -104,28 +105,10 @@ const Dashboard = () => {
         </CardContent>
       </Card>
 
-      {/* Macronutrients */}
-      <Card className="animate-fade-in">
-        <CardHeader>
-          <CardTitle>Macronutrients</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-red-500">{Math.round(totals.protein)}g</div>
-              <p className="text-sm text-gray-600">Protein</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-500">{Math.round(totals.carbs)}g</div>
-              <p className="text-sm text-gray-600">Carbs</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-500">{Math.round(totals.fat)}g</div>
-              <p className="text-sm text-gray-600">Fat</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Macronutrients Tracker */}
+      <div className="animate-fade-in">
+        <MacronutrientsTracker totals={totals} />
+      </div>
 
       {/* Steps Section */}
       <div className="animate-fade-in">
