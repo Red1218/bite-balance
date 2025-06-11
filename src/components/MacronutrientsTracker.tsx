@@ -66,12 +66,12 @@ const MacronutrientsTracker = ({ totals }: MacronutrientsTrackerProps) => {
         <CardTitle>Macronutrients Tracker</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col sm:flex-row gap-6">
+        <div className="grid grid-cols-2 gap-6">
           {macros.map((macro) => {
             const percentage = calculatePercentage(macro.current, macro.target);
             
             return (
-              <div key={macro.label} className="flex-1 flex flex-col items-center space-y-3">
+              <div key={macro.label} className="flex flex-col items-center space-y-3">
                 <div className="text-center">
                   <h3 className={`text-sm font-medium ${macro.textColor}`}>
                     {macro.label}
