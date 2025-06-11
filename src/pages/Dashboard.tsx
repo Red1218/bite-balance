@@ -2,17 +2,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Plus, Flame, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDailyMeals } from "@/hooks/useDailyMeals";
 import EditMealDialog from "@/components/EditMealDialog";
 import StepsSection from "@/components/StepsSection";
+import { useToast } from "@/hooks/use-toast";
 
 const Dashboard = () => {
   const { meals, loading, totals, updateMeal, deleteMeal } = useDailyMeals();
   const [editingMeal, setEditingMeal] = useState<any>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const { toast } = useToast();
 
   // Mock daily goal - this could come from user settings
   const dailyGoal = 2200;
@@ -24,15 +26,23 @@ const Dashboard = () => {
     setIsEditDialogOpen(true);
   };
 
-  const handleDeleteMeal = async (mealId: string) => {
+  const handleDeleteMeal = async (mealId: string, mealName: string) => {
     if (window.confirm('Are you sure you want to delete this meal?')) {
       await deleteMeal(mealId);
+      toast({
+        title: "Meal deleted",
+        description: `"${mealName}" has been removed from your daily log.`,
+      });
     }
   };
 
   const handleSaveMeal = async (updates: any) => {
     if (editingMeal) {
       await updateMeal(editingMeal.id, updates);
+      toast({
+        title: "Meal updated",
+        description: `"${updates.name || editingMeal.name}" has been updated.`,
+      });
     }
   };
 
@@ -143,7 +153,7 @@ const Dashboard = () => {
               {meals.map((meal, index) => (
                 <div 
                   key={meal.id} 
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-300 animate-fade-in hover-scale"
+                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-300 animate-fade-in hover:scale-105"
                   style={{ 
                     animationDelay: `${index * 100}ms`,
                     animationFillMode: 'both'
@@ -167,15 +177,15 @@ const Dashboard = () => {
                       variant="ghost"
                       size="sm"
                       onClick={() => handleEditMeal(meal)}
-                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200"
+                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-all duration-200 hover:scale-110"
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleDeleteMeal(meal.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200"
+                      onClick={() => handleDeleteMeal(meal.id, meal.name)}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200 hover:scale-110"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>

@@ -14,7 +14,8 @@ import {
   LogOut,
   Heart,
   Menu,
-  X
+  X,
+  Activity
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -37,6 +38,20 @@ const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
 
   const handleSignOut = async () => {
     await signOut();
+  };
+
+  const handleStepsClick = () => {
+    // Scroll to steps section if on dashboard
+    if (location.pathname === "/") {
+      const stepsSection = document.getElementById('steps-section');
+      if (stepsSection) {
+        stepsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth < 768) {
+      onToggle();
+    }
   };
 
   return (
@@ -133,6 +148,27 @@ const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
                   </Link>
                 );
               })}
+              
+              {/* Steps Section Link */}
+              <button
+                onClick={handleStepsClick}
+                className={cn(
+                  "w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200 group relative",
+                  "text-gray-600 hover:text-gray-900 hover:bg-gray-50",
+                  !isOpen && "md:justify-center md:space-x-0"
+                )}
+                title={!isOpen ? "Steps" : undefined}
+              >
+                <Activity className="w-5 h-5 flex-shrink-0 text-gray-400" />
+                {isOpen && <span>Steps</span>}
+                
+                {/* Tooltip for collapsed state */}
+                {!isOpen && (
+                  <div className="hidden md:block absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                    Steps
+                  </div>
+                )}
+              </button>
             </div>
           </nav>
 

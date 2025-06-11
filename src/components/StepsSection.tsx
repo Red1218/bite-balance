@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowDown } from "lucide-react";
 
 const StepsSection = () => {
   const [steps, setSteps] = useState(7420);
@@ -21,7 +20,7 @@ const StepsSection = () => {
   };
 
   return (
-    <Card>
+    <Card id="steps-section">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium">👣 Steps Taken Today</CardTitle>
         <Button
@@ -29,9 +28,13 @@ const StepsSection = () => {
           size="icon"
           onClick={handleRefreshSteps}
           disabled={isLoading}
-          className="h-8 w-8 text-gray-500 hover:text-gray-700"
+          className="h-8 w-8 text-gray-500 hover:text-gray-700 hover:scale-110 transition-all duration-300 cursor-pointer"
         >
-          <ArrowDown className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          <img 
+            src="/reload-icon.png" 
+            alt="Reload" 
+            className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+          />
         </Button>
       </CardHeader>
       <CardContent>

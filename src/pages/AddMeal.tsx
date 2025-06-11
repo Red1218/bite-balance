@@ -68,8 +68,8 @@ const AddMeal = () => {
       if (error) throw error;
 
       toast({
-        title: "Meal Added!",
-        description: `${mealData.name} has been added to your daily log.`,
+        title: "Meal added",
+        description: `"${mealData.name}" has been added to your daily log.`,
       });
       
       // Reset form
