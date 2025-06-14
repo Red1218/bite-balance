@@ -9,9 +9,9 @@ interface DailySummaryProps {
 }
 
 const DailySummary = ({ calories, goal }: DailySummaryProps) => {
-  const percentage = Math.round((calories / goal) * 100);
+  const percentage = Math.min(Math.round((calories / goal) * 100), 100);
   const remaining = Math.max(0, goal - calories);
-  const circumference = 2 * Math.PI * 70; // reduced radius for mobile
+  const circumference = 2 * Math.PI * 70;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
@@ -48,6 +48,9 @@ const DailySummary = ({ calories, goal }: DailySummaryProps) => {
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
                 className="text-primary transition-all duration-500 ease-out"
+                style={{
+                  strokeDashoffset: strokeDashoffset
+                }}
               />
             </svg>
             
@@ -65,21 +68,21 @@ const DailySummary = ({ calories, goal }: DailySummaryProps) => {
             </div>
           </div>
           
-          {/* Stats Grid - Mobile First */}
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 mt-4 sm:mt-6">
-            <div className="bg-muted/10 rounded-lg p-3 sm:p-4 border border-white/5 text-center">
-              <div className="text-xs text-blue-400 font-medium mb-2">Consumed</div>
-              <div className="text-xl sm:text-2xl font-bold text-foreground leading-none">{calories.toLocaleString()}</div>
+          {/* Stats Grid - Always Side by Side */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 mt-4 sm:mt-6">
+            <div className="bg-muted/10 rounded-lg p-2 sm:p-3 lg:p-4 border border-white/5 text-center">
+              <div className="text-xs text-blue-400 font-medium mb-1 sm:mb-2">Consumed</div>
+              <div className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground leading-none">{calories.toLocaleString()}</div>
             </div>
             
-            <div className="bg-muted/10 rounded-lg p-3 sm:p-4 border border-white/5 text-center">
-              <div className="text-xs text-green-400 font-medium mb-2">Goal</div>            
-              <div className="text-xl sm:text-2xl font-bold text-foreground leading-none">{goal.toLocaleString()}</div>
+            <div className="bg-muted/10 rounded-lg p-2 sm:p-3 lg:p-4 border border-white/5 text-center">
+              <div className="text-xs text-green-400 font-medium mb-1 sm:mb-2">Goal</div>            
+              <div className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground leading-none">{goal.toLocaleString()}</div>
             </div>
             
-            <div className="bg-muted/10 rounded-lg p-3 sm:p-4 border border-white/5 text-center">
-              <div className="text-xs text-purple-400 font-medium mb-2">Left over</div>
-              <div className="text-xl sm:text-2xl font-bold text-foreground leading-none">{remaining.toLocaleString()}</div>
+            <div className="bg-muted/10 rounded-lg p-2 sm:p-3 lg:p-4 border border-white/5 text-center">
+              <div className="text-xs text-purple-400 font-medium mb-1 sm:mb-2">Left over</div>
+              <div className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground leading-none">{remaining.toLocaleString()}</div>
             </div>
           </div>
           
