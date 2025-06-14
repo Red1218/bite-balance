@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, Check } from "lucide-react";
+import { RefreshCw, Check, ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Steps = () => {
   const [googleFitConnected, setGoogleFitConnected] = useState(false);
@@ -46,25 +45,32 @@ const Steps = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[80vh]">
-      <Card className="w-full max-w-md rounded-xl shadow-md hover:scale-105 transition-transform duration-300">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">🦶 Track Your Steps</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-md mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="flex items-center gap-4 mb-8">
+          <Link to="/">
+            <Button variant="ghost" size="icon" className="text-foreground hover:bg-accent">
+              <ArrowLeft className="w-6 h-6" />
+            </Button>
+          </Link>
+          <h1 className="text-xl font-medium text-foreground">🦶 Track Your Steps</h1>
+        </div>
+
+        <div className="glass-card p-6 space-y-6">
           {/* Google Fit Connection */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             {googleFitConnected ? (
-              <div className="flex items-center justify-center space-x-2 p-3 bg-green-50 rounded-lg border border-green-200">
-                <Check className="w-5 h-5 text-green-600" />
-                <span className="text-green-700 font-medium">Connected to Google Fit</span>
+              <div className="flex items-center justify-center space-x-2 p-4 bg-green-500/20 rounded-xl border border-green-500/30">
+                <Check className="w-5 h-5 text-green-400" />
+                <span className="text-green-300 font-medium">Connected to Google Fit</span>
               </div>
             ) : (
               <>
                 <Button
                   onClick={handleGoogleFitConnect}
                   disabled={googleFitLoading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-colors h-12 rounded-xl"
                 >
                   {googleFitLoading ? (
                     <div className="flex items-center space-x-2">
@@ -75,24 +81,24 @@ const Steps = () => {
                     "Connect to Google Fit"
                   )}
                 </Button>
-                <p className="text-xs text-gray-500 text-center">Requires permission to access step data</p>
+                <p className="text-xs text-muted-foreground text-center">Requires permission to access step data</p>
               </>
             )}
           </div>
 
           {/* OnePlus Health Connection */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             {onePlusConnected ? (
-              <div className="flex items-center justify-center space-x-2 p-3 bg-green-50 rounded-lg border border-green-200">
-                <Check className="w-5 h-5 text-green-600" />
-                <span className="text-green-700 font-medium">Connected to OnePlus Health</span>
+              <div className="flex items-center justify-center space-x-2 p-4 bg-green-500/20 rounded-xl border border-green-500/30">
+                <Check className="w-5 h-5 text-green-400" />
+                <span className="text-green-300 font-medium">Connected to OnePlus Health</span>
               </div>
             ) : (
               <>
                 <Button
                   onClick={handleOnePlusConnect}
                   disabled={onePlusLoading}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white transition-colors"
+                  className="w-full bg-red-600 hover:bg-red-700 text-white transition-colors h-12 rounded-xl"
                 >
                   {onePlusLoading ? (
                     <div className="flex items-center space-x-2">
@@ -103,33 +109,33 @@ const Steps = () => {
                     "Connect to OnePlus Health"
                   )}
                 </Button>
-                <p className="text-xs text-gray-500 text-center">Requires permission to access step data</p>
+                <p className="text-xs text-muted-foreground text-center">Requires permission to access step data</p>
               </>
             )}
           </div>
 
           {/* Step Count Display */}
           {(googleFitConnected || onePlusConnected) && (
-            <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <div className="mt-6 p-4 bg-background/50 rounded-xl border border-border">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Today's Steps</h3>
-                  <p className="text-3xl font-bold text-blue-600">{stepCount.toLocaleString()}</p>
+                  <h3 className="text-lg font-semibold text-foreground">Today's Steps</h3>
+                  <p className="text-3xl font-bold text-primary">{stepCount.toLocaleString()}</p>
                 </div>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={handleRefreshSteps}
                   disabled={isRefreshing}
-                  className="h-10 w-10 text-gray-500 hover:text-gray-700 hover:scale-110 transition-all duration-300"
+                  className="h-10 w-10 text-muted-foreground hover:text-foreground hover:scale-110 transition-all duration-300"
                 >
                   <RefreshCw className={`h-5 w-5 ${isRefreshing ? 'animate-spin' : ''}`} />
                 </Button>
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

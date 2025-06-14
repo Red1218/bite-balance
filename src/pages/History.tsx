@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -59,146 +58,126 @@ const History = () => {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link to="/">
-          <Button variant="outline" size="icon">
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-        </Link>
-        <h1 className="text-3xl font-bold text-foreground">History</h1>
-      </div>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center gap-4">
+          <Link to="/">
+            <Button variant="ghost" size="icon" className="text-foreground hover:bg-accent">
+              <ArrowLeft className="w-6 h-6" />
+            </Button>
+          </Link>
+          <h1 className="text-xl font-medium text-foreground">📈 History</h1>
+        </div>
 
-      {/* Date Selector */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Calendar className="w-5 h-5" />
-            Select Date
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+        {/* Date Selector */}
+        <div className="glass-card p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Calendar className="w-5 h-5 text-primary" />
+            <h3 className="text-base font-medium text-foreground">Select Date</h3>
+          </div>
           <input
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full p-2 border border-border rounded-md bg-background text-foreground"
+            className="w-full p-3 border border-border rounded-xl bg-background/50 text-foreground backdrop-blur-sm"
             max={new Date().toISOString().split('T')[0]}
           />
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Daily Summary */}
-      {selectedDayData ? (
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>
+        {/* Daily Summary */}
+        {selectedDayData ? (
+          <div className="space-y-4">
+            <div className="glass-card p-4">
+              <h3 className="text-base font-medium text-foreground mb-4">
                 Daily Summary - {new Date(selectedDayData.date).toLocaleDateString('en-US', { 
                   weekday: 'long', 
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
                 })}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className={`text-3xl font-bold ${getProgressColor(selectedDayData.totalCalories, selectedDayData.goal)}`}>
+              </h3>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <div className={`text-2xl font-bold ${getProgressColor(selectedDayData.totalCalories, selectedDayData.goal)}`}>
                     {selectedDayData.totalCalories}
                   </div>
-                  <p className="text-muted-foreground">Calories Consumed</p>
+                  <p className="text-xs text-muted-foreground">Consumed</p>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-foreground">{selectedDayData.goal}</div>
-                  <p className="text-muted-foreground">Daily Goal</p>
+                <div>
+                  <div className="text-2xl font-bold text-foreground">{selectedDayData.goal}</div>
+                  <p className="text-xs text-muted-foreground">Goal</p>
                 </div>
-                <div className="text-center">
-                  <div className={`text-3xl font-bold ${getProgressColor(selectedDayData.totalCalories, selectedDayData.goal)}`}>
+                <div>
+                  <div className={`text-2xl font-bold ${getProgressColor(selectedDayData.totalCalories, selectedDayData.goal)}`}>
                     {Math.round((selectedDayData.totalCalories / selectedDayData.goal) * 100)}%
                   </div>
-                  <p className="text-muted-foreground">Goal Achievement</p>
+                  <p className="text-xs text-muted-foreground">Achievement</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Meals */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Meals</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
+            {/* Meals */}
+            <div className="glass-card p-4">
+              <h3 className="text-base font-medium text-foreground mb-4">Meals</h3>
+              <div className="space-y-3">
                 {selectedDayData.meals.map((meal, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-3 bg-background/50 rounded-lg border border-border">
                     <div>
-                      <h3 className="font-medium text-foreground">{meal.name}</h3>
-                      <p className="text-sm text-muted-foreground">{meal.time}</p>
+                      <h4 className="font-medium text-foreground text-sm">{meal.name}</h4>
+                      <p className="text-xs text-muted-foreground">{meal.time}</p>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-primary">{meal.calories}</span>
-                      <p className="text-sm text-muted-foreground">calories</p>
+                      <span className="font-bold text-primary text-sm">{meal.calories}</span>
+                      <p className="text-xs text-muted-foreground">cal</p>
                     </div>
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Daily Reflection */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Daily Reflection</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-foreground italic">"{selectedDayData.reflection}"</p>
-            </CardContent>
-          </Card>
-        </div>
-      ) : (
-        <Card>
-          <CardContent className="text-center py-12">
-            <p className="text-muted-foreground">No data available for this date.</p>
-            <p className="text-sm text-muted-foreground mt-2">Start logging meals to see your history!</p>
-          </CardContent>
-        </Card>
-      )}
+            {/* Daily Reflection */}
+            <div className="glass-card p-4">
+              <h3 className="text-base font-medium text-foreground mb-3">Daily Reflection</h3>
+              <p className="text-foreground italic text-sm">"{selectedDayData.reflection}"</p>
+            </div>
+          </div>
+        ) : (
+          <div className="glass-card p-8 text-center">
+            <p className="text-muted-foreground mb-2">No data available for this date.</p>
+            <p className="text-sm text-muted-foreground">Start logging meals to see your history!</p>
+          </div>
+        )}
 
-      {/* Weekly Overview */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Week Overview</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
+        {/* Weekly Overview */}
+        <div className="glass-card p-4">
+          <h3 className="text-base font-medium text-foreground mb-4">Recent Week Overview</h3>
+          <div className="space-y-3">
             {historyData.map((day, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
+              <div key={index} className="flex items-center justify-between p-3 bg-background/50 rounded-lg border border-border">
                 <div>
-                  <h3 className="font-medium text-foreground">
+                  <h4 className="font-medium text-foreground text-sm">
                     {new Date(day.date).toLocaleDateString('en-US', { 
                       weekday: 'short', 
                       month: 'short', 
                       day: 'numeric' 
                     })}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">{day.meals.length} meals logged</p>
+                  </h4>
+                  <p className="text-xs text-muted-foreground">{day.meals.length} meals logged</p>
                 </div>
                 <div className="text-right">
-                  <span className={`font-bold ${getProgressColor(day.totalCalories, day.goal)}`}>
+                  <span className={`font-bold text-sm ${getProgressColor(day.totalCalories, day.goal)}`}>
                     {day.totalCalories} / {day.goal}
                   </span>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {Math.round((day.totalCalories / day.goal) * 100)}%
                   </p>
                 </div>
               </div>
             ))}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,156 +32,149 @@ const Settings = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Link to="/">
-          <Button variant="outline" size="icon">
-            <ArrowLeft className="w-4 h-4" />
-          </Button>
-        </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
-      </div>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center gap-4">
+          <Link to="/">
+            <Button variant="ghost" size="icon" className="text-foreground hover:bg-accent">
+              <ArrowLeft className="w-6 h-6" />
+            </Button>
+          </Link>
+          <h1 className="text-xl font-medium text-foreground">⚙️ Settings</h1>
+        </div>
 
-      {/* Daily Goal */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Daily Calorie Goal</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="calorieGoal">Target Calories per Day</Label>
+        {/* Daily Goal */}
+        <div className="glass-card p-4">
+          <h3 className="text-base font-medium text-foreground mb-4">Daily Calorie Goal</h3>
+          <div className="space-y-3">
+            <Label htmlFor="calorieGoal" className="text-foreground text-sm">Target Calories per Day</Label>
             <Input
               id="calorieGoal"
               type="number"
               value={settings.dailyCalorieGoal}
               onChange={(e) => setSettings({ ...settings, dailyCalorieGoal: e.target.value })}
               placeholder="2200"
+              className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground rounded-xl h-12 backdrop-blur-sm"
             />
-            <p className="text-sm text-gray-600">
+            <p className="text-xs text-muted-foreground">
               This goal will be used to track your daily progress. You can also set this automatically in your Profile.
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Meal Tags */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Default Meal Tags</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="mealTags">Common Tags (comma-separated)</Label>
+        {/* Meal Tags */}
+        <div className="glass-card p-4">
+          <h3 className="text-base font-medium text-foreground mb-4">Default Meal Tags</h3>
+          <div className="space-y-3">
+            <Label htmlFor="mealTags" className="text-foreground text-sm">Common Tags (comma-separated)</Label>
             <Input
               id="mealTags"
               value={settings.defaultMealTags}
               onChange={(e) => setSettings({ ...settings, defaultMealTags: e.target.value })}
               placeholder="Healthy, Quick, Protein, Carb, Fiber"
+              className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground rounded-xl h-12 backdrop-blur-sm"
             />
-            <p className="text-sm text-gray-600">
+            <p className="text-xs text-muted-foreground">
               These tags will be available as quick options when adding meals.
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Reminders */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Meal Reminders</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <Label htmlFor="reminders">Enable Meal Reminders</Label>
-              <p className="text-sm text-gray-600">Get notified to log your meals</p>
+        {/* Reminders */}
+        <div className="glass-card p-4">
+          <h3 className="text-base font-medium text-foreground mb-4">Meal Reminders</h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="reminders" className="text-foreground text-sm">Enable Meal Reminders</Label>
+                <p className="text-xs text-muted-foreground">Get notified to log your meals</p>
+              </div>
+              <Switch
+                id="reminders"
+                checked={settings.remindersEnabled}
+                onCheckedChange={(checked) => setSettings({ ...settings, remindersEnabled: checked })}
+              />
             </div>
-            <Switch
-              id="reminders"
-              checked={settings.remindersEnabled}
-              onCheckedChange={(checked) => setSettings({ ...settings, remindersEnabled: checked })}
-            />
-          </div>
 
-          {settings.remindersEnabled && (
-            <div className="space-y-4 border-t pt-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="breakfastTime">Breakfast</Label>
-                  <Input
-                    id="breakfastTime"
-                    type="time"
-                    value={settings.reminderTimes.breakfast}
-                    onChange={(e) => setSettings({ 
-                      ...settings, 
-                      reminderTimes: { ...settings.reminderTimes, breakfast: e.target.value }
-                    })}
-                  />
-                </div>
+            {settings.remindersEnabled && (
+              <div className="space-y-4 border-t border-border pt-4">
+                <div className="space-y-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="breakfastTime" className="text-foreground text-sm">Breakfast</Label>
+                    <Input
+                      id="breakfastTime"
+                      type="time"
+                      value={settings.reminderTimes.breakfast}
+                      onChange={(e) => setSettings({ 
+                        ...settings, 
+                        reminderTimes: { ...settings.reminderTimes, breakfast: e.target.value }
+                      })}
+                      className="bg-background/50 border-border text-foreground rounded-xl h-12 backdrop-blur-sm"
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="lunchTime">Lunch</Label>
-                  <Input
-                    id="lunchTime"
-                    type="time"
-                    value={settings.reminderTimes.lunch}
-                    onChange={(e) => setSettings({ 
-                      ...settings, 
-                      reminderTimes: { ...settings.reminderTimes, lunch: e.target.value }
-                    })}
-                  />
-                </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lunchTime" className="text-foreground text-sm">Lunch</Label>
+                    <Input
+                      id="lunchTime"
+                      type="time"
+                      value={settings.reminderTimes.lunch}
+                      onChange={(e) => setSettings({ 
+                        ...settings, 
+                        reminderTimes: { ...settings.reminderTimes, lunch: e.target.value }
+                      })}
+                      className="bg-background/50 border-border text-foreground rounded-xl h-12 backdrop-blur-sm"
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="dinnerTime">Dinner</Label>
-                  <Input
-                    id="dinnerTime"
-                    type="time"
-                    value={settings.reminderTimes.dinner}
-                    onChange={(e) => setSettings({ 
-                      ...settings, 
-                      reminderTimes: { ...settings.reminderTimes, dinner: e.target.value }
-                    })}
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="dinnerTime" className="text-foreground text-sm">Dinner</Label>
+                    <Input
+                      id="dinnerTime"
+                      type="time"
+                      value={settings.reminderTimes.dinner}
+                      onChange={(e) => setSettings({ 
+                        ...settings, 
+                        reminderTimes: { ...settings.reminderTimes, dinner: e.target.value }
+                      })}
+                      className="bg-background/50 border-border text-foreground rounded-xl h-12 backdrop-blur-sm"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            )}
+          </div>
+        </div>
 
-      {/* Theme */}
-      <Card>
-        <CardHeader>
-          <CardTitle>App Theme</CardTitle>
-        </CardHeader>
-        <CardContent>
+        {/* Theme */}
+        <div className="glass-card p-4">
+          <h3 className="text-base font-medium text-foreground mb-4">App Theme</h3>
           <div className="space-y-2">
-            <Label htmlFor="theme">Color Theme</Label>
+            <Label htmlFor="theme" className="text-foreground text-sm">Color Theme</Label>
             <Select 
               value={settings.theme} 
               onValueChange={(value) => setSettings({ ...settings, theme: value })}
             >
-              <SelectTrigger>
+              <SelectTrigger className="bg-background/50 border-border text-foreground rounded-xl h-12 backdrop-blur-sm [&>svg]:text-muted-foreground">
                 <SelectValue placeholder="Select theme" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="red">Red Accent (Current)</SelectItem>
+              <SelectContent className="bg-card border-border backdrop-blur-xl">
+                <SelectItem value="light" className="text-foreground hover:bg-accent focus:bg-accent">Light</SelectItem>
+                <SelectItem value="dark" className="text-foreground hover:bg-accent focus:bg-accent">Dark</SelectItem>
+                <SelectItem value="red" className="text-foreground hover:bg-accent focus:bg-accent">Red Accent (Current)</SelectItem>
               </SelectContent>
             </Select>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Save Button */}
-      <div className="flex justify-end">
-        <Button onClick={handleSave} className="bg-red-500 hover:bg-red-600 text-white">
-          <Save className="w-4 h-4 mr-2" />
-          Save Settings
-        </Button>
+        {/* Save Button */}
+        <div className="pt-4">
+          <Button onClick={handleSave} className="w-full primary-button h-12">
+            <Save className="w-4 h-4 mr-2" />
+            Save Settings
+          </Button>
+        </div>
       </div>
     </div>
   );

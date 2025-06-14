@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Calculator, Save, User } from "lucide-react";
+import { Calculator, Save, User, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const { toast } = useToast();
@@ -135,196 +135,197 @@ const Profile = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center">
-          <User className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-background">
+      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center gap-4">
+          <Link to="/">
+            <Button variant="ghost" size="icon" className="text-foreground hover:bg-accent">
+              <ArrowLeft className="w-6 h-6" />
+            </Button>
+          </Link>
+          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+            <User className="w-5 h-5 text-white" />
+          </div>
+          <h1 className="text-xl font-medium text-foreground">👤 Profile</h1>
         </div>
-        <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-      </div>
 
-      {/* Personal Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Personal Information</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                value={profile.name}
-                onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                placeholder="Your name"
-              />
+        {/* Personal Information */}
+        <div className="glass-card p-4">
+          <h3 className="text-base font-medium text-foreground mb-4">Personal Information</h3>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-foreground text-sm">Name</Label>
+                <Input
+                  id="name"
+                  value={profile.name}
+                  onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                  placeholder="Your name"
+                  className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground rounded-xl h-12 backdrop-blur-sm"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="age" className="text-foreground text-sm">Age</Label>
+                <Input
+                  id="age"
+                  type="number"
+                  value={profile.age}
+                  onChange={(e) => setProfile({ ...profile, age: e.target.value })}
+                  placeholder="Years"
+                  className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground rounded-xl h-12 backdrop-blur-sm"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="weight" className="text-foreground text-sm">Weight (kg)</Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  value={profile.weight}
+                  onChange={(e) => setProfile({ ...profile, weight: e.target.value })}
+                  placeholder="Kilograms"
+                  className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground rounded-xl h-12 backdrop-blur-sm"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="height" className="text-foreground text-sm">Height (cm)</Label>
+                <Input
+                  id="height"
+                  type="number"
+                  value={profile.height}
+                  onChange={(e) => setProfile({ ...profile, height: e.target.value })}
+                  placeholder="Centimeters"
+                  className="bg-background/50 border-border text-foreground placeholder:text-muted-foreground rounded-xl h-12 backdrop-blur-sm"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="gender" className="text-foreground text-sm">Gender</Label>
+                <Select 
+                  value={profile.gender} 
+                  onValueChange={(value) => setProfile({ ...profile, gender: value })}
+                >
+                  <SelectTrigger className="bg-background/50 border-border text-foreground rounded-xl h-12 backdrop-blur-sm [&>svg]:text-muted-foreground">
+                    <SelectValue placeholder="Select gender" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card border-border backdrop-blur-xl">
+                    <SelectItem value="male" className="text-foreground hover:bg-accent focus:bg-accent">Male</SelectItem>
+                    <SelectItem value="female" className="text-foreground hover:bg-accent focus:bg-accent">Female</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="activityLevel" className="text-foreground text-sm">Activity Level</Label>
+                <Select 
+                  value={profile.activityLevel} 
+                  onValueChange={(value) => setProfile({ ...profile, activityLevel: value })}
+                >
+                  <SelectTrigger className="bg-background/50 border-border text-foreground rounded-xl h-12 backdrop-blur-sm [&>svg]:text-muted-foreground">
+                    <SelectValue placeholder="Select activity level" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card border-border backdrop-blur-xl">
+                    <SelectItem value="sedentary" className="text-foreground hover:bg-accent focus:bg-accent">Sedentary</SelectItem>
+                    <SelectItem value="active" className="text-foreground hover:bg-accent focus:bg-accent">Active</SelectItem>
+                    <SelectItem value="very_active" className="text-foreground hover:bg-accent focus:bg-accent">Very Active</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="age">Age</Label>
-              <Input
-                id="age"
-                type="number"
-                value={profile.age}
-                onChange={(e) => setProfile({ ...profile, age: e.target.value })}
-                placeholder="Years"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="weight">Weight (kg)</Label>
-              <Input
-                id="weight"
-                type="number"
-                value={profile.weight}
-                onChange={(e) => setProfile({ ...profile, weight: e.target.value })}
-                placeholder="Kilograms"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="height">Height (cm)</Label>
-              <Input
-                id="height"
-                type="number"
-                value={profile.height}
-                onChange={(e) => setProfile({ ...profile, height: e.target.value })}
-                placeholder="Centimeters"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="gender">Gender</Label>
+              <Label htmlFor="goal" className="text-foreground text-sm">Goal</Label>
               <Select 
-                value={profile.gender} 
-                onValueChange={(value) => setProfile({ ...profile, gender: value })}
+                value={profile.goal} 
+                onValueChange={(value) => setProfile({ ...profile, goal: value })}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select gender" />
+                <SelectTrigger className="bg-background/50 border-border text-foreground rounded-xl h-12 backdrop-blur-sm [&>svg]:text-muted-foreground">
+                  <SelectValue placeholder="Select your goal" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
+                <SelectContent className="bg-card border-border backdrop-blur-xl">
+                  <SelectItem value="lose" className="text-foreground hover:bg-accent focus:bg-accent">Lose Weight</SelectItem>
+                  <SelectItem value="maintain" className="text-foreground hover:bg-accent focus:bg-accent">Maintain Weight</SelectItem>
+                  <SelectItem value="gain" className="text-foreground hover:bg-accent focus:bg-accent">Gain Weight</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="activityLevel">Activity Level</Label>
-              <Select 
-                value={profile.activityLevel} 
-                onValueChange={(value) => setProfile({ ...profile, activityLevel: value })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select activity level" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="sedentary">Sedentary (little/no exercise)</SelectItem>
-                  <SelectItem value="active">Active (moderate exercise 3-5 days/week)</SelectItem>
-                  <SelectItem value="very_active">Very Active (hard exercise 6-7 days/week)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
           </div>
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="goal">Goal</Label>
-            <Select 
-              value={profile.goal} 
-              onValueChange={(value) => setProfile({ ...profile, goal: value })}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select your goal" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="lose">Lose Weight</SelectItem>
-                <SelectItem value="maintain">Maintain Weight</SelectItem>
-                <SelectItem value="gain">Gain Weight</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Calorie Goal Calculator */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Calorie Goal Calculator</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-gray-600">
+        {/* Calorie Goal Calculator */}
+        <div className="glass-card p-4">
+          <h3 className="text-base font-medium text-foreground mb-4">Calorie Goal Calculator</h3>
+          <p className="text-sm text-muted-foreground mb-4">
             Calculate your daily calorie goal based on your personal information and activity level.
           </p>
           
           <Button 
             onClick={calculateCalorieGoal}
-            className="bg-red-500 hover:bg-red-600 text-white"
+            className="w-full primary-button h-12 mb-4"
           >
             <Calculator className="w-4 h-4 mr-2" />
             Calculate Calorie Goal
           </Button>
 
           {calculatedGoal && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-              <h3 className="font-semibold text-red-800 mb-2">Recommended Daily Calorie Goal</h3>
-              <div className="text-3xl font-bold text-red-600 mb-2">{calculatedGoal} calories</div>
-              <p className="text-sm text-red-700">
+            <div className="p-4 bg-primary/20 border border-primary/30 rounded-xl">
+              <h4 className="font-semibold text-primary mb-2">Recommended Daily Calorie Goal</h4>
+              <div className="text-3xl font-bold text-primary mb-2">{calculatedGoal} calories</div>
+              <p className="text-sm text-muted-foreground">
                 This is based on your current profile settings and {profile.goal} goal.
               </p>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Health Metrics Summary */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Health Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-gray-800">
+        {/* Health Metrics Summary */}
+        <div className="glass-card p-4">
+          <h3 className="text-base font-medium text-foreground mb-4">Health Summary</h3>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="p-3 bg-background/50 rounded-lg border border-border">
+              <div className="text-xl font-bold text-foreground">
                 {profile.weight ? parseFloat(profile.weight).toFixed(1) : "--"}
               </div>
-              <p className="text-sm text-gray-600">Weight (kg)</p>
+              <p className="text-xs text-muted-foreground">Weight (kg)</p>
             </div>
             
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-gray-800">
+            <div className="p-3 bg-background/50 rounded-lg border border-border">
+              <div className="text-xl font-bold text-foreground">
                 {profile.height ? parseFloat(profile.height).toFixed(0) : "--"}
               </div>
-              <p className="text-sm text-gray-600">Height (cm)</p>
+              <p className="text-xs text-muted-foreground">Height (cm)</p>
             </div>
             
-            <div className="p-4 bg-gray-50 rounded-lg">
-              <div className="text-2xl font-bold text-red-600">
+            <div className="p-3 bg-background/50 rounded-lg border border-border">
+              <div className="text-xl font-bold text-primary">
                 {profile.weight && profile.height 
                   ? (parseFloat(profile.weight) / Math.pow(parseFloat(profile.height) / 100, 2)).toFixed(1)
                   : "--"
                 }
               </div>
-              <p className="text-sm text-gray-600">BMI</p>
+              <p className="text-xs text-muted-foreground">BMI</p>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* Save Button */}
-      <div className="flex justify-end">
-        <Button 
-          onClick={handleSave} 
-          className="bg-red-500 hover:bg-red-600 text-white"
-          disabled={loading}
-        >
-          <Save className="w-4 h-4 mr-2" />
-          {loading ? 'Saving...' : 'Save Profile'}
-        </Button>
+        {/* Save Button */}
+        <div className="pt-4">
+          <Button 
+            onClick={handleSave} 
+            className="w-full primary-button h-12"
+            disabled={loading}
+          >
+            <Save className="w-4 h-4 mr-2" />
+            {loading ? 'Saving...' : 'Save Profile'}
+          </Button>
+        </div>
       </div>
     </div>
   );
