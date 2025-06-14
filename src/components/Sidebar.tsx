@@ -14,7 +14,7 @@ const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
       {/* Mobile overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
           onClick={onToggle}
         />
       )}
@@ -24,17 +24,14 @@ const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
         onClick={onToggle}
         variant="ghost"
         size="icon"
-        className="fixed top-4 left-4 z-50 glass-nav hover:bg-white/20 transition-all duration-300 hover:scale-110 hover-glow-blue"
+        className="fixed top-4 left-4 z-50 bg-white shadow-md hover:bg-gray-50"
       >
-        {isOpen ? 
-          <X className="w-5 h-5 text-neon-blue" /> : 
-          <Menu className="w-5 h-5 text-neon-red" />
-        }
+        {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </Button>
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed left-0 top-0 h-full glass-card border-r border-white/10 backdrop-blur-2xl z-50 transition-all duration-500 ease-out slide-in-left",
+        "fixed left-0 top-0 h-full bg-white border-r border-gray-200 shadow-lg z-50 transition-all duration-300 ease-in-out",
         isOpen 
           ? "w-64 translate-x-0" 
           : "w-16 -translate-x-full md:translate-x-0"

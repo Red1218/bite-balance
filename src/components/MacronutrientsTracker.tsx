@@ -30,66 +30,71 @@ const MacronutrientsTracker = ({ totals }: MacronutrientsTrackerProps) => {
       label: 'Protein',
       current: totals.protein,
       target: dailyTargets.protein,
-      color: 'neon-red',
-      gradient: 'from-neon-red to-neon-pink'
+      color: 'blue',
+      bgColor: 'bg-blue-500',
+      textColor: 'text-blue-600'
     },
     {
       label: 'Carbs',
       current: totals.carbs,
       target: dailyTargets.carbs,
-      color: 'neon-blue',
-      gradient: 'from-neon-blue to-neon-cyan'
+      color: 'yellow',
+      bgColor: 'bg-yellow-500',
+      textColor: 'text-yellow-600'
     },
     {
       label: 'Fat',
       current: totals.fat,
       target: dailyTargets.fat,
-      color: 'neon-pink',
-      gradient: 'from-neon-pink to-neon-red'
+      color: 'red',
+      bgColor: 'bg-red-500',
+      textColor: 'text-red-600'
     },
     {
       label: 'Fibre',
       current: totals.fiber || 0,
       target: dailyTargets.fiber,
-      color: 'neon-cyan',
-      gradient: 'from-neon-cyan to-neon-blue'
+      color: 'green',
+      bgColor: 'bg-green-500',
+      textColor: 'text-green-600'
     }
   ];
 
   return (
-    <Card className="glass-card border-gradient-red float">
+    <Card className="animate-fade-in">
       <CardHeader>
-        <CardTitle className="text-gradient-red">Macronutrients Tracker</CardTitle>
+        <CardTitle>Macronutrients Tracker</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-6">
-          {macros.map((macro, index) => {
+          {macros.map((macro) => {
             const percentage = calculatePercentage(macro.current, macro.target);
             
             return (
-              <div 
-                key={macro.label} 
-                className={`flex flex-col items-center space-y-3 glass-nav p-4 hover:bg-white/10 transition-all duration-300 hover:scale-105 slide-in-up delay-${(index + 1) * 100}`}
-              >
+              <div key={macro.label} className="flex flex-col items-center space-y-3">
                 <div className="text-center">
-                  <h3 className={`text-sm font-medium text-${macro.color}`}>
+                  <h3 className={`text-sm font-medium ${macro.textColor}`}>
                     {macro.label}
                   </h3>
-                  <div className={`text-2xl font-bold text-${macro.color} animate-glow`}>
+                  <div className={`text-xl font-bold ${macro.textColor}`}>
                     {Math.round(percentage)}%
                   </div>
-                  <p className="text-xs text-foreground/60">
+                  <p className="text-xs text-gray-500">
                     {Math.round(macro.current)}g / {macro.target}g
                   </p>
                 </div>
                 
-                <div className="w-full max-w-[120px] relative">
-                  <div className="h-3 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
-                    <div 
-                      className={`h-full bg-gradient-to-r ${macro.gradient} transition-all duration-1000 ease-out rounded-full`}
-                      style={{ width: `${percentage}%` }}
-                    />
-                  </div>
+                <div className="w-full max-w-[120px]">
+                  <Progress 
+                    value={percentage} 
+                    className="h-3 transition-all duration-500 ease-in-out"
+                    style={{
+                      '--progress-background': macro.color === 'blue' ? '#3b82f6' :
+                                            macro.color === 'yellow' ? '#eab308' :
+                                            macro.color === 'red' ? '#ef4444' :
+                                            '#22c55e'
+                    } as React.CSSProperties}
+                  />
                 </div>
               </div>
             );
