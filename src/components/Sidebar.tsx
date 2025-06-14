@@ -15,7 +15,7 @@ import {
   Heart,
   Menu,
   X,
-  Activity
+  Footprints
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -159,7 +159,7 @@ const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
                 )}
                 title={!isOpen ? "Steps" : undefined}
               >
-                <Activity className="w-5 h-5 flex-shrink-0 text-gray-400" />
+                <Footprints className="w-5 h-5 flex-shrink-0 text-gray-400" />
                 {isOpen && <span>Steps</span>}
                 
                 {/* Tooltip for collapsed state */}
