@@ -2,9 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Utensils } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import AnimatedMealCard from './AnimatedMealCard';
-import EmptyMealsState from './EmptyMealsState';
+import MealCategorySection from './MealCategorySection';
 
 interface MealItem {
   id: string;
@@ -30,21 +28,36 @@ const TodaysMealsSection = ({
   onEditMeal, 
   onDeleteMeal 
 }: TodaysMealsSectionProps) => {
-  if (meals.length === 0) {
-    return (
-      <Card className="metric-card animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-            <Utensils className="w-5 h-5 text-primary" />
-            Today's Meals
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <EmptyMealsState />
-        </CardContent>
-      </Card>
-    );
-  }
+  const mealCategories = [
+    { 
+      key: 'breakfast', 
+      name: 'Breakfast', 
+      emoji: '🌅',
+      meals: groupedMeals.breakfast?.meals || [],
+      totalCalories: groupedMeals.breakfast?.totalCalories || 0
+    },
+    { 
+      key: 'lunch', 
+      name: 'Lunch', 
+      emoji: '🌞',
+      meals: groupedMeals.lunch?.meals || [],
+      totalCalories: groupedMeals.lunch?.totalCalories || 0
+    },
+    { 
+      key: 'dinner', 
+      name: 'Dinner', 
+      emoji: '🌙',
+      meals: groupedMeals.dinner?.meals || [],
+      totalCalories: groupedMeals.dinner?.totalCalories || 0
+    },
+    { 
+      key: 'snack', 
+      name: 'Snacks', 
+      emoji: '🍎',
+      meals: groupedMeals.snack?.meals || [],
+      totalCalories: groupedMeals.snack?.totalCalories || 0
+    }
+  ];
 
   return (
     <Card className="metric-card animate-fade-in-up" style={{ animationDelay: '200ms' }}>
@@ -55,18 +68,16 @@ const TodaysMealsSection = ({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <AnimatePresence mode="popLayout">
-            {meals.map((meal, index) => (
-              <AnimatedMealCard
-                key={meal.id}
-                meal={meal}
-                index={index}
-                onEditMeal={onEditMeal}
-                onDeleteMeal={onDeleteMeal}
-              />
-            ))}
-          </AnimatePresence>
+        <div className="space-y-4">
+          {mealCategories.map((category, index) => (
+            <MealCategorySection
+              key={category.key}
+              category={category}
+              index={index}
+              onEditMeal={onEditMeal}
+              onDeleteMeal={onDeleteMeal}
+            />
+          ))}
         </div>
       </CardContent>
     </Card>
