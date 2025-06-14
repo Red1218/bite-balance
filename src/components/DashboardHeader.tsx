@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { Button } from "@/components/ui/button";
-import { PlusCircle, CalendarDays } from "lucide-react";
-import { Link } from "react-router-dom";
+import { CalendarDays } from "lucide-react";
 
 interface DashboardHeaderProps {
   todayDate: string;
@@ -18,12 +16,6 @@ const DashboardHeader = ({ todayDate }: DashboardHeaderProps) => {
           <p className="text-sm sm:text-base">{todayDate}</p>
         </div>
       </div>
-      <Link to="/add-meal" className="w-full sm:w-auto">
-        <Button className="primary-button w-full sm:w-auto">
-          <PlusCircle className="w-4 h-4 mr-2" />
-          Add Meal
-        </Button>
-      </Link>
     </div>
   );
 };
