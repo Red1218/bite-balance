@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Activity } from "lucide-react";
 
 interface MacronutrientsTrackerProps {
   totals: {
@@ -13,12 +14,11 @@ interface MacronutrientsTrackerProps {
 }
 
 const MacronutrientsTracker = ({ totals }: MacronutrientsTrackerProps) => {
-  // Mock daily targets - these could come from user settings later
   const dailyTargets = {
-    protein: 150, // grams
-    carbs: 250,   // grams
-    fat: 80,      // grams
-    fiber: 25     // grams
+    protein: 150,
+    carbs: 250,
+    fat: 80,
+    fiber: 25
   };
 
   const calculatePercentage = (current: number, target: number) => {
@@ -30,76 +30,81 @@ const MacronutrientsTracker = ({ totals }: MacronutrientsTrackerProps) => {
       label: 'Protein',
       current: totals.protein,
       target: dailyTargets.protein,
-      color: 'blue',
-      bgColor: 'bg-blue-500',
-      textColor: 'text-blue-600'
+      color: '#ef4444',
+      unit: 'g'
     },
     {
       label: 'Carbs',
       current: totals.carbs,
       target: dailyTargets.carbs,
-      color: 'yellow',
-      bgColor: 'bg-yellow-500',
-      textColor: 'text-yellow-600'
+      color: '#f59e0b',
+      unit: 'g'
     },
     {
       label: 'Fat',
       current: totals.fat,
       target: dailyTargets.fat,
-      color: 'red',
-      bgColor: 'bg-red-500',
-      textColor: 'text-red-600'
+      color: '#8b5cf6',
+      unit: 'g'
     },
     {
-      label: 'Fibre',
+      label: 'Fiber',
       current: totals.fiber || 0,
       target: dailyTargets.fiber,
-      color: 'green',
-      bgColor: 'bg-green-500',
-      textColor: 'text-green-600'
+      color: '#10b981',
+      unit: 'g'
     }
   ];
 
   return (
-    <Card className="animate-fade-in">
-      <CardHeader>
-        <CardTitle>Macronutrients Tracker</CardTitle>
+    <Card className="metric-card animate-slide-in-right">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Activity className="w-5 h-5 text-primary" />
+          Macronutrients
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 gap-6">
-          {macros.map((macro) => {
-            const percentage = calculatePercentage(macro.current, macro.target);
-            
-            return (
-              <div key={macro.label} className="flex flex-col items-center space-y-3">
-                <div className="text-center">
-                  <h3 className={`text-sm font-medium ${macro.textColor}`}>
-                    {macro.label}
-                  </h3>
-                  <div className={`text-xl font-bold ${macro.textColor}`}>
-                    {Math.round(percentage)}%
-                  </div>
-                  <p className="text-xs text-gray-500">
-                    {Math.round(macro.current)}g / {macro.target}g
-                  </p>
-                </div>
-                
-                <div className="w-full max-w-[120px]">
-                  <Progress 
-                    value={percentage} 
-                    className="h-3 transition-all duration-500 ease-in-out"
-                    style={{
-                      '--progress-background': macro.color === 'blue' ? '#3b82f6' :
-                                            macro.color === 'yellow' ? '#eab308' :
-                                            macro.color === 'red' ? '#ef4444' :
-                                            '#22c55e'
-                    } as React.CSSProperties}
-                  />
-                </div>
+      <CardContent className="space-y-6">
+        {macros.map((macro, index) => {
+          const percentage = calculatePercentage(macro.current, macro.target);
+          
+          return (
+            <div 
+              key={macro.label} 
+              className="space-y-2"
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-foreground">
+                  {macro.label}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {Math.round(macro.current)}{macro.unit} / {macro.target}{macro.unit}
+                </span>
               </div>
-            );
-          })}
-        </div>
+              
+              <div className="relative">
+                <Progress 
+                  value={percentage} 
+                  className="h-2 bg-muted/30"
+                />
+                <div 
+                  className="absolute inset-0 h-2 rounded-full transition-all duration-700 ease-out"
+                  style={{
+                    background: `linear-gradient(90deg, ${macro.color} 0%, ${macro.color}80 100%)`,
+                    width: `${percentage}%`
+                  }}
+                />
+              </div>
+              
+              <div className="text-right">
+                <span className="text-xs font-medium" style={{ color: macro.color }}>
+                  {Math.round(percentage)}%
+                </span>
+              </div>
+            </div>
+          );
+        })}
       </CardContent>
     </Card>
   );
