@@ -126,6 +126,7 @@ export const useDailyMeals = () => {
           protein: savedMeal.protein || 0,
           carbs: savedMeal.carbs || 0,
           fat: savedMeal.fat || 0,
+          fiber: savedMeal.fiber || 0,
           meal_time: mealTime,
           logged_date: today
         });

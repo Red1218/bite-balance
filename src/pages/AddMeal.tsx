@@ -24,6 +24,7 @@ const AddMeal = () => {
     protein: "",
     carbs: "",
     fat: "",
+    fiber: "",
     date: new Date().toISOString().split('T')[0],
     notes: ""
   });
@@ -61,6 +62,7 @@ const AddMeal = () => {
           protein: Number(mealData.protein) || 0,
           carbs: Number(mealData.carbs) || 0,
           fat: Number(mealData.fat) || 0,
+          fiber: Number(mealData.fiber) || 0,
           meal_time: mealData.mealTime,
           logged_date: mealData.date
         });
@@ -80,6 +82,7 @@ const AddMeal = () => {
         protein: "",
         carbs: "",
         fat: "",
+        fiber: "",
         date: new Date().toISOString().split('T')[0],
         notes: ""
       });
@@ -174,7 +177,7 @@ const AddMeal = () => {
 
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-gray-900">Macronutrients (optional)</h3>
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-4 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="protein">Protein (g)</Label>
                   <Input
@@ -207,6 +210,18 @@ const AddMeal = () => {
                     step="0.1"
                     value={mealData.fat}
                     onChange={(e) => setMealData({ ...mealData, fat: e.target.value })}
+                    placeholder="0"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="fiber">Fiber (g)</Label>
+                  <Input
+                    id="fiber"
+                    type="number"
+                    step="0.1"
+                    value={mealData.fiber}
+                    onChange={(e) => setMealData({ ...mealData, fiber: e.target.value })}
                     placeholder="0"
                   />
                 </div>

@@ -11,6 +11,7 @@ export interface SavedMeal {
   protein: number;
   carbs: number;
   fat: number;
+  fiber?: number;
   tags: string[];
   notes: string;
 }

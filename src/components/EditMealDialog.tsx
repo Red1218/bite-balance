@@ -33,6 +33,7 @@ const EditMealDialog: React.FC<EditMealDialogProps> = ({
     protein: meal?.protein || 0,
     carbs: meal?.carbs || 0,
     fat: meal?.fat || 0,
+    fiber: meal?.fiber || 0,
     meal_time: meal?.meal_time || 'snack',
     tags: meal?.tags?.join(', ') || '',
     notes: meal?.notes || ''
@@ -51,6 +52,7 @@ const EditMealDialog: React.FC<EditMealDialogProps> = ({
         protein: Number(formData.protein),
         carbs: Number(formData.carbs),
         fat: Number(formData.fat),
+        fiber: Number(formData.fiber),
         ...(isDailyMeal && { meal_time: formData.meal_time }),
         ...(!isDailyMeal && {
           tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
@@ -75,6 +77,7 @@ const EditMealDialog: React.FC<EditMealDialogProps> = ({
         protein: meal.protein || 0,
         carbs: meal.carbs || 0,
         fat: meal.fat || 0,
+        fiber: meal.fiber || 0,
         meal_time: meal.meal_time || 'snack',
         tags: meal.tags?.join(', ') || '',
         notes: meal.notes || ''
@@ -128,7 +131,7 @@ const EditMealDialog: React.FC<EditMealDialogProps> = ({
             )}
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             <div>
               <Label htmlFor="protein">Protein (g)</Label>
               <Input
@@ -157,6 +160,16 @@ const EditMealDialog: React.FC<EditMealDialogProps> = ({
                 step="0.1"
                 value={formData.fat}
                 onChange={(e) => setFormData(prev => ({ ...prev, fat: Number(e.target.value) }))}
+              />
+            </div>
+            <div>
+              <Label htmlFor="fiber">Fiber (g)</Label>
+              <Input
+                id="fiber"
+                type="number"
+                step="0.1"
+                value={formData.fiber}
+                onChange={(e) => setFormData(prev => ({ ...prev, fiber: Number(e.target.value) }))}
               />
             </div>
           </div>
