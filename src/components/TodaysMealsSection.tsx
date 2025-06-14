@@ -2,7 +2,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Utensils } from "lucide-react";
-import MealCategoryCard from './MealCategoryCard';
+import { motion, AnimatePresence } from "framer-motion";
+import AnimatedMealCard from './AnimatedMealCard';
 import EmptyMealsState from './EmptyMealsState';
 
 interface MealItem {
@@ -29,37 +30,6 @@ const TodaysMealsSection = ({
   onEditMeal, 
   onDeleteMeal 
 }: TodaysMealsSectionProps) => {
-  const mealCategories = [
-    { 
-      key: 'breakfast', 
-      name: 'Breakfast', 
-      icon: '🌅',
-      bgGradient: 'from-red-500/10 to-red-600/20',
-      iconBg: 'bg-red-500'
-    },
-    { 
-      key: 'lunch', 
-      name: 'Lunch', 
-      icon: '🌞',
-      bgGradient: 'from-red-400/10 to-red-500/20',
-      iconBg: 'bg-red-600'
-    },
-    { 
-      key: 'dinner', 
-      name: 'Dinner', 
-      icon: '🌙',
-      bgGradient: 'from-red-600/10 to-red-700/20',
-      iconBg: 'bg-red-700'
-    },
-    { 
-      key: 'snack', 
-      name: 'Snacks', 
-      icon: '🍎',
-      bgGradient: 'from-red-300/10 to-red-400/20',
-      iconBg: 'bg-red-400'
-    }
-  ];
-
   if (meals.length === 0) {
     return (
       <Card className="metric-card animate-fade-in-up" style={{ animationDelay: '200ms' }}>
@@ -84,23 +54,20 @@ const TodaysMealsSection = ({
           Today's Meals
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {mealCategories.map((category, categoryIndex) => {
-          const categoryData = groupedMeals[category.key];
-          const hasEntries = categoryData && categoryData.meals.length > 0;
-          
-          return (
-            <MealCategoryCard
-              key={category.key}
-              category={category}
-              categoryData={categoryData}
-              hasEntries={hasEntries}
-              categoryIndex={categoryIndex}
-              onEditMeal={onEditMeal}
-              onDeleteMeal={onDeleteMeal}
-            />
-          );
-        })}
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <AnimatePresence mode="popLayout">
+            {meals.map((meal, index) => (
+              <AnimatedMealCard
+                key={meal.id}
+                meal={meal}
+                index={index}
+                onEditMeal={onEditMeal}
+                onDeleteMeal={onDeleteMeal}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
       </CardContent>
     </Card>
   );
