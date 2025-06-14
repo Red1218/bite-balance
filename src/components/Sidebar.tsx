@@ -11,22 +11,27 @@ import SidebarSignOut from './sidebar/SidebarSignOut';
 const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
   return (
     <>
+      {/* Mobile overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
           onClick={onToggle}
         />
       )}
+      
+      {/* Toggle Button */}
       <Button
         onClick={onToggle}
         variant="ghost"
         size="icon"
-        className="fixed top-4 left-4 z-50 glass-card"
+        className="fixed top-4 left-4 z-50 bg-white shadow-md hover:bg-gray-50"
       >
-        {isOpen ? <X className="w-5 h-5 glow-icon" /> : <Menu className="w-5 h-5 glow-icon" />}
+        {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </Button>
+
+      {/* Sidebar */}
       <div className={cn(
-        "fixed left-0 top-0 h-full glass-sidebar z-50 transition-all duration-300 ease-in-out",
+        "fixed left-0 top-0 h-full bg-white border-r border-gray-200 shadow-lg z-50 transition-all duration-300 ease-in-out",
         isOpen 
           ? "w-64 translate-x-0" 
           : "w-16 -translate-x-full md:translate-x-0"
