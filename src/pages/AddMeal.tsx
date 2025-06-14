@@ -110,7 +110,7 @@ const AddMeal = () => {
             <ArrowLeft className="w-4 h-4" />
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">Add Meal to Today</h1>
+        <h1 className="text-3xl font-bold text-foreground">Add Meal to Today</h1>
       </div>
 
       <Card>
@@ -176,8 +176,8 @@ const AddMeal = () => {
             </div>
 
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-gray-900">Macronutrients (optional)</h3>
-              <div className="grid grid-cols-4 gap-4">
+              <h3 className="text-lg font-semibold text-foreground">Macronutrients (optional)</h3>
+              <div className="grid grid-cols-5 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="protein">Protein (g)</Label>
                   <Input

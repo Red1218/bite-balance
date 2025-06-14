@@ -23,7 +23,7 @@
     --secondary-foreground: 0 0% 98%;
 
     --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted-foreground: 0 0% 83.9%;
 
     --accent: 0 0% 14.9%;
     --accent-foreground: 0 0% 98%;
@@ -56,6 +56,36 @@
   body {
     @apply bg-background text-foreground;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* Ensure all text elements use proper foreground colors */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground;
+  }
+
+  p {
+    @apply text-foreground;
+  }
+
+  label {
+    @apply text-foreground;
+  }
+
+  /* Override any hardcoded gray text colors */
+  .text-gray-900 {
+    @apply text-foreground !important;
+  }
+
+  .text-gray-700 {
+    @apply text-muted-foreground !important;
+  }
+
+  .text-gray-600 {
+    @apply text-muted-foreground !important;
+  }
+
+  .text-gray-500 {
+    @apply text-muted-foreground !important;
   }
 }
 
