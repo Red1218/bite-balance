@@ -53,9 +53,9 @@ const History = () => {
 
   const getProgressColor = (consumed: number, goal: number) => {
     const percentage = (consumed / goal) * 100;
-    if (percentage < 70) return "text-green-600";
-    if (percentage < 90) return "text-yellow-600";
-    return "text-red-600";
+    if (percentage < 70) return "text-green-500";
+    if (percentage < 90) return "text-yellow-500";
+    return "text-red-500";
   };
 
   return (
@@ -67,7 +67,7 @@ const History = () => {
             <ArrowLeft className="w-4 h-4" />
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold text-gray-900">History</h1>
+        <h1 className="text-3xl font-bold text-foreground">History</h1>
       </div>
 
       {/* Date Selector */}
@@ -83,7 +83,7 @@ const History = () => {
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full p-2 border border-border rounded-md bg-background text-foreground"
             max={new Date().toISOString().split('T')[0]}
           />
         </CardContent>
@@ -109,17 +109,17 @@ const History = () => {
                   <div className={`text-3xl font-bold ${getProgressColor(selectedDayData.totalCalories, selectedDayData.goal)}`}>
                     {selectedDayData.totalCalories}
                   </div>
-                  <p className="text-gray-600">Calories Consumed</p>
+                  <p className="text-muted-foreground">Calories Consumed</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-700">{selectedDayData.goal}</div>
-                  <p className="text-gray-600">Daily Goal</p>
+                  <div className="text-3xl font-bold text-foreground">{selectedDayData.goal}</div>
+                  <p className="text-muted-foreground">Daily Goal</p>
                 </div>
                 <div className="text-center">
                   <div className={`text-3xl font-bold ${getProgressColor(selectedDayData.totalCalories, selectedDayData.goal)}`}>
                     {Math.round((selectedDayData.totalCalories / selectedDayData.goal) * 100)}%
                   </div>
-                  <p className="text-gray-600">Goal Achievement</p>
+                  <p className="text-muted-foreground">Goal Achievement</p>
                 </div>
               </div>
             </CardContent>
@@ -133,14 +133,14 @@ const History = () => {
             <CardContent>
               <div className="space-y-4">
                 {selectedDayData.meals.map((meal, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                     <div>
-                      <h3 className="font-medium">{meal.name}</h3>
-                      <p className="text-sm text-gray-600">{meal.time}</p>
+                      <h3 className="font-medium text-foreground">{meal.name}</h3>
+                      <p className="text-sm text-muted-foreground">{meal.time}</p>
                     </div>
                     <div className="text-right">
-                      <span className="font-bold text-red-600">{meal.calories}</span>
-                      <p className="text-sm text-gray-600">calories</p>
+                      <span className="font-bold text-primary">{meal.calories}</span>
+                      <p className="text-sm text-muted-foreground">calories</p>
                     </div>
                   </div>
                 ))}
@@ -154,15 +154,15 @@ const History = () => {
               <CardTitle>Daily Reflection</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700 italic">"{selectedDayData.reflection}"</p>
+              <p className="text-foreground italic">"{selectedDayData.reflection}"</p>
             </CardContent>
           </Card>
         </div>
       ) : (
         <Card>
           <CardContent className="text-center py-12">
-            <p className="text-gray-600">No data available for this date.</p>
-            <p className="text-sm text-gray-500 mt-2">Start logging meals to see your history!</p>
+            <p className="text-muted-foreground">No data available for this date.</p>
+            <p className="text-sm text-muted-foreground mt-2">Start logging meals to see your history!</p>
           </CardContent>
         </Card>
       )}
@@ -175,22 +175,22 @@ const History = () => {
         <CardContent>
           <div className="space-y-4">
             {historyData.map((day, index) => (
-              <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={index} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
                 <div>
-                  <h3 className="font-medium">
+                  <h3 className="font-medium text-foreground">
                     {new Date(day.date).toLocaleDateString('en-US', { 
                       weekday: 'short', 
                       month: 'short', 
                       day: 'numeric' 
                     })}
                   </h3>
-                  <p className="text-sm text-gray-600">{day.meals.length} meals logged</p>
+                  <p className="text-sm text-muted-foreground">{day.meals.length} meals logged</p>
                 </div>
                 <div className="text-right">
                   <span className={`font-bold ${getProgressColor(day.totalCalories, day.goal)}`}>
                     {day.totalCalories} / {day.goal}
                   </span>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted-foreground">
                     {Math.round((day.totalCalories / day.goal) * 100)}%
                   </p>
                 </div>
