@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Activity } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 
 interface MacronutrientsTrackerProps {
   totals: {
@@ -60,7 +59,7 @@ const MacronutrientsTracker = ({ totals }: MacronutrientsTrackerProps) => {
     <Card className="metric-card animate-slide-in-right">
       <CardHeader className="pb-3 sm:pb-4">
         <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-          <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+          <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           Macronutrients
         </CardTitle>
       </CardHeader>

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { Target, TrendingUp } from "lucide-react";
+import { Zap, TrendingUp } from "lucide-react";
 
 interface DailySummaryProps {
   calories: number;
@@ -19,7 +19,7 @@ const DailySummary = ({ calories, goal }: DailySummaryProps) => {
       <CardContent className="p-4 sm:p-6 lg:p-8">
         <div className="text-center space-y-4 sm:space-y-6">
           <div className="flex items-center justify-center gap-2 text-muted-foreground">
-            <Target className="w-4 h-4" />
+            <Zap className="w-4 h-4" />
             <span className="text-sm font-medium">Today's Intake</span>
           </div>
           

@@ -1,13 +1,12 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { NavItem } from '@/types/sidebar';
 import { 
-  Home, 
-  Plus, 
-  BookOpen, 
-  History, 
+  BarChart3, 
+  PlusCircle, 
+  BookmarkPlus, 
+  Calendar, 
   Settings, 
   User,
   Footprints
@@ -22,10 +21,10 @@ const SidebarNavigation = ({ isOpen, onToggle }: SidebarNavigationProps) => {
   const location = useLocation();
 
   const navItems: NavItem[] = [
-    { path: "/", icon: Home, label: "Dashboard" },
-    { path: "/add-meal", icon: Plus, label: "Add Meal" },
-    { path: "/saved-meals", icon: BookOpen, label: "Saved Meals" },
-    { path: "/history", icon: History, label: "History" },
+    { path: "/", icon: BarChart3, label: "Dashboard" },
+    { path: "/add-meal", icon: PlusCircle, label: "Add Meal" },
+    { path: "/saved-meals", icon: BookmarkPlus, label: "Saved Meals" },
+    { path: "/history", icon: Calendar, label: "History" },
     { path: "/steps", icon: Footprints, label: "Steps" },
     { path: "/settings", icon: Settings, label: "Settings" },
     { path: "/profile", icon: User, label: "Profile" },
