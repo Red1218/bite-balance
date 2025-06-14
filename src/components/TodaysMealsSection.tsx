@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
 import MealCategorySection from './MealCategorySection';
 
 interface MealItem {
@@ -59,21 +58,19 @@ const TodaysMealsSection = ({
   ];
 
   return (
-    <Card className="metric-card animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-      <CardContent className="p-0">
-        <div className="seamless-meal-container">
-          {mealCategories.map((category, index) => (
-            <MealCategorySection
-              key={category.key}
-              category={category}
-              index={index}
-              onEditMeal={onEditMeal}
-              onDeleteMeal={onDeleteMeal}
-            />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+      <div className="seamless-meal-container">
+        {mealCategories.map((category, index) => (
+          <MealCategorySection
+            key={category.key}
+            category={category}
+            index={index}
+            onEditMeal={onEditMeal}
+            onDeleteMeal={onDeleteMeal}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
