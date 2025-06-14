@@ -67,8 +67,8 @@ const TodaysMealsSection = ({
           Today's Meals
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+      <CardContent className="p-0">
+        <div className="seamless-meal-container">
           {mealCategories.map((category, index) => (
             <MealCategorySection
               key={category.key}

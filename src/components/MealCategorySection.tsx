@@ -89,7 +89,7 @@ const MealCategorySection = ({
       animate="visible"
       className="w-full"
     >
-      <div className="glass-card overflow-hidden shadow-2xl border border-white/20">
+      <div className="seamless-meal-card overflow-hidden">
         {/* Category Header */}
         <div 
           className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-all duration-300 backdrop-blur-md"
