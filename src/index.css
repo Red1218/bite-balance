@@ -124,7 +124,7 @@
   }
   
   .seamless-meal-card {
-    @apply bg-white/3 backdrop-blur-xl border-0 border-t border-white/10 shadow-none;
+    @apply backdrop-blur-xl border-0 border-t border-white/10 shadow-none;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
     border-radius: 0;
     transition: all 0.3s ease;
