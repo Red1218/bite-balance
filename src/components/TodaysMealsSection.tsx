@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Utensils } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import MealCategorySection from './MealCategorySection';
 
 interface MealItem {
@@ -61,12 +60,6 @@ const TodaysMealsSection = ({
 
   return (
     <Card className="metric-card animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-          <Utensils className="w-5 h-5 text-primary" />
-          Today's Meals
-        </CardTitle>
-      </CardHeader>
       <CardContent className="p-0">
         <div className="seamless-meal-container">
           {mealCategories.map((category, index) => (
