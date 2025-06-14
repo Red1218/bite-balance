@@ -11,22 +11,75 @@ interface DailySummaryProps {
 const DailySummary = ({ calories, goal }: DailySummaryProps) => {
   const percentage = Math.round((calories / goal) * 100);
   const remaining = Math.max(0, goal - calories);
+  const circumference = 2 * Math.PI * 90; // radius of 90
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   return (
     <Card className="metric-card border-primary/20 animate-fade-in-up">
       <CardContent className="p-8">
-        <div className="text-center space-y-4">
+        <div className="text-center space-y-6">
           <div className="flex items-center justify-center gap-2 text-muted-foreground">
             <Target className="w-4 h-4" />
             <span className="text-sm font-medium">Today's Intake</span>
           </div>
           
-          <div className="space-y-2">
-            <div className="text-6xl font-bold text-primary">
-              {calories.toLocaleString()}
+          {/* Circular Progress Ring */}
+          <div className="relative w-48 h-48 mx-auto">
+            <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 200 200">
+              {/* Background ring */}
+              <circle
+                cx="100"
+                cy="100"
+                r="90"
+                stroke="currentColor"
+                strokeWidth="8"
+                fill="none"
+                className="text-muted/20"
+              />
+              {/* Progress ring */}
+              <circle
+                cx="100"
+                cy="100"
+                r="90"
+                stroke="currentColor"
+                strokeWidth="8"
+                fill="none"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                className="text-primary transition-all duration-500 ease-out"
+              />
+            </svg>
+            
+            {/* Center content */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="text-4xl font-bold text-primary">
+                {calories.toLocaleString()}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                from {goal.toLocaleString()}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {percentage}% achieved
+              </div>
             </div>
-            <div className="text-lg text-muted-foreground">
-              of {goal.toLocaleString()} calories
+          </div>
+          
+          {/* Stats Grid */}
+          <div className="grid grid-cols-3 gap-4 mt-6">
+            <div className="bg-muted/10 rounded-lg p-4 border border-white/5">
+              <div className="text-xs text-blue-400 font-medium mb-1">Consumed</div>
+              <div className="text-2xl font-bold text-foreground">{calories.toLocaleString()}</div>
+            </div>
+            
+            <div className="bg-muted/10 rounded-lg p-4 border border-white/5">
+              <div className="text-xs text-green-400 font-medium mb-1">Goal</div>            
+              <div className="text-2xl font-bold text-foreground">{goal.toLocaleString()}</div>
+            </div>
+            
+            <div className="bg-muted/10 rounded-lg p-4 border border-white/5">
+              <div className="text-xs text-purple-400 font-medium mb-1">Left over</div>
+              <div className="text-2xl font-bold text-foreground">{remaining.toLocaleString()}</div>
             </div>
           </div>
           
@@ -35,13 +88,6 @@ const DailySummary = ({ calories, goal }: DailySummaryProps) => {
             <span className="text-muted-foreground">
               {remaining > 0 ? `${remaining} calories remaining` : `${Math.abs(remaining)} calories over`}
             </span>
-          </div>
-          
-          <div className="w-full bg-muted/30 rounded-full h-2">
-            <div 
-              className="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${Math.min(percentage, 100)}%` }}
-            />
           </div>
         </div>
       </CardContent>
