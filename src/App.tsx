@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import AddMeal from "./pages/AddMeal";
 import SavedMeals from "./pages/SavedMeals";
 import History from "./pages/History";
+import Steps from "./pages/Steps";
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
@@ -63,6 +64,7 @@ const AppRoutes = () => {
         <Route path="/add-meal" element={<AddMeal />} />
         <Route path="/saved-meals" element={<SavedMeals />} />
         <Route path="/history" element={<History />} />
+        <Route path="/steps" element={<Steps />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
