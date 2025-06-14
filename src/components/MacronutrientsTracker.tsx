@@ -58,27 +58,27 @@ const MacronutrientsTracker = ({ totals }: MacronutrientsTrackerProps) => {
 
   return (
     <Card className="metric-card animate-slide-in-right">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Activity className="w-5 h-5 text-primary" />
+      <CardHeader className="pb-3 sm:pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+          <Activity className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           Macronutrients
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4 sm:space-y-6">
         {macros.map((macro, index) => {
           const percentage = calculatePercentage(macro.current, macro.target);
           
           return (
             <div 
               key={macro.label} 
-              className="space-y-2"
+              className="space-y-2 sm:space-y-3"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-foreground">
+                <span className="text-sm sm:text-base font-medium text-foreground">
                   {macro.label}
                 </span>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-xs sm:text-sm text-muted-foreground">
                   {Math.round(macro.current)}{macro.unit} / {macro.target}{macro.unit}
                 </span>
               </div>
@@ -86,10 +86,10 @@ const MacronutrientsTracker = ({ totals }: MacronutrientsTrackerProps) => {
               <div className="relative">
                 <Progress 
                   value={percentage} 
-                  className="h-2 bg-muted/30"
+                  className="h-2 sm:h-3 bg-muted/30"
                 />
                 <div 
-                  className="absolute inset-0 h-2 rounded-full transition-all duration-700 ease-out"
+                  className="absolute inset-0 h-2 sm:h-3 rounded-full transition-all duration-700 ease-out"
                   style={{
                     background: `linear-gradient(90deg, ${macro.color} 0%, ${macro.color}80 100%)`,
                     width: `${percentage}%`
@@ -98,7 +98,7 @@ const MacronutrientsTracker = ({ totals }: MacronutrientsTrackerProps) => {
               </div>
               
               <div className="text-right">
-                <span className="text-xs font-medium" style={{ color: macro.color }}>
+                <span className="text-xs sm:text-sm font-medium" style={{ color: macro.color }}>
                   {Math.round(percentage)}%
                 </span>
               </div>

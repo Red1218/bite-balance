@@ -27,20 +27,20 @@ const StepsSection = () => {
 
   return (
     <Card className="metric-card">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center gap-2 text-lg">
-          <Footprints className="w-5 h-5 text-primary" />
+      <CardHeader className="pb-3 sm:pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+          <Footprints className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           Activity Tracker
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {!connected ? (
-          <div className="text-center space-y-4 py-6">
-            <div className="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto">
-              <Smartphone className="w-8 h-8 text-muted-foreground" />
+          <div className="text-center space-y-4 py-4 sm:py-6">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto">
+              <Smartphone className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-muted-foreground text-sm mb-4">
+              <p className="text-muted-foreground text-xs sm:text-sm mb-4 px-2">
                 Connect your fitness tracker to monitor daily activity.
               </p>
               <Button
@@ -51,12 +51,12 @@ const StepsSection = () => {
                 {loading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>Connecting...</span>
+                    <span className="text-sm sm:text-base">Connecting...</span>
                   </div>
                 ) : (
                   <div className="flex items-center space-x-2">
                     <Smartphone className="w-4 h-4" />
-                    <span>Connect Google Fit</span>
+                    <span className="text-sm sm:text-base">Connect Google Fit</span>
                   </div>
                 )}
               </Button>
@@ -64,16 +64,16 @@ const StepsSection = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="flex items-center justify-center gap-2 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+            <div className="flex items-center justify-center gap-2 p-2 sm:p-3 bg-green-500/10 rounded-lg border border-green-500/20">
               <Check className="w-4 h-4 text-green-400" />
-              <span className="text-sm text-green-400 font-medium">Connected</span>
+              <span className="text-xs sm:text-sm text-green-400 font-medium">Connected</span>
             </div>
             
-            <div className="text-center space-y-2 p-4 bg-muted/20 rounded-lg">
+            <div className="text-center space-y-2 p-3 sm:p-4 bg-muted/20 rounded-lg">
               <div className="flex items-center justify-between">
                 <div className="text-left">
-                  <h3 className="text-sm font-medium text-muted-foreground">Today's Steps</h3>
-                  <p className="text-2xl font-bold text-primary">{stepCount.toLocaleString()}</p>
+                  <h3 className="text-xs sm:text-sm font-medium text-muted-foreground">Today's Steps</h3>
+                  <p className="text-xl sm:text-2xl font-bold text-primary">{stepCount.toLocaleString()}</p>
                 </div>
                 <Button
                   variant="ghost"
