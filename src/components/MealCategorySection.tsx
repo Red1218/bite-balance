@@ -43,15 +43,20 @@ const MealCategorySection = ({
   const containerVariants: Variants = {
     hidden: { 
       opacity: 0, 
-      y: 20
+      y: 30,
+      scale: 0.95
     },
     visible: { 
       opacity: 1, 
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.4,
-        delay: index * 0.1,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        duration: 0.6,
+        delay: index * 0.15,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        type: "spring",
+        stiffness: 100,
+        damping: 15
       }
     }
   };
@@ -61,23 +66,29 @@ const MealCategorySection = ({
       height: 0,
       opacity: 0,
       transition: {
-        duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        duration: 0.4,
+        ease: [0.4, 0.0, 0.2, 1]
       }
     },
     expanded: {
       height: "auto",
       opacity: 1,
       transition: {
-        duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        duration: 0.4,
+        ease: [0.4, 0.0, 0.2, 1]
       }
     }
   };
 
   const chevronVariants: Variants = {
-    collapsed: { rotate: 0 },
-    expanded: { rotate: 180 }
+    collapsed: { 
+      rotate: 0,
+      transition: { duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }
+    },
+    expanded: { 
+      rotate: 180,
+      transition: { duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }
+    }
   };
 
   const mealEntries = category.meals.length;
@@ -91,9 +102,12 @@ const MealCategorySection = ({
     >
       <div className="seamless-meal-card overflow-hidden">
         {/* Category Header */}
-        <div 
+        <motion.div 
           className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-all duration-300 backdrop-blur-md"
           onClick={() => setIsExpanded(!isExpanded)}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+          transition={{ duration: 0.2, ease: [0.4, 0.0, 0.2, 1] }}
         >
           <div className="flex items-center gap-3">
             <span className="text-2xl">{category.emoji}</span>
@@ -122,12 +136,11 @@ const MealCategorySection = ({
             <motion.div
               variants={chevronVariants}
               animate={isExpanded ? "expanded" : "collapsed"}
-              transition={{ duration: 0.3 }}
             >
               <ChevronDown className="w-5 h-5 text-gray-300" />
             </motion.div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Expandable Content */}
         <AnimatePresence>
@@ -156,10 +169,14 @@ const MealCategorySection = ({
                       {category.meals.map((meal, mealIndex) => (
                         <motion.div
                           key={meal.id}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                          transition={{ duration: 0.3, delay: mealIndex * 0.05 }}
+                          transition={{ 
+                            duration: 0.35, 
+                            delay: mealIndex * 0.08,
+                            ease: [0.25, 0.46, 0.45, 0.94]
+                          }}
                           className="glass-card p-3 border border-white/10 hover:bg-white/10 transition-all duration-200 group backdrop-blur-md"
                         >
                           <div className="flex items-start justify-between mb-2">
