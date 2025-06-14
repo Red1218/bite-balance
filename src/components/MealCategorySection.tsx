@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, Plus, ChevronDown, Clock } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Link } from "react-router-dom";
 
 interface MealItem {
@@ -40,7 +40,7 @@ const MealCategorySection = ({
 }: MealCategorySectionProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { 
       opacity: 0, 
       y: 20
@@ -51,18 +51,18 @@ const MealCategorySection = ({
       transition: {
         duration: 0.4,
         delay: index * 0.1,
-        ease: "easeOut"
+        ease: [0.25, 0.46, 0.45, 0.94]
       }
     }
   };
 
-  const contentVariants = {
+  const contentVariants: Variants = {
     collapsed: {
       height: 0,
       opacity: 0,
       transition: {
         duration: 0.3,
-        ease: "easeOut"
+        ease: [0.25, 0.46, 0.45, 0.94]
       }
     },
     expanded: {
@@ -70,12 +70,12 @@ const MealCategorySection = ({
       opacity: 1,
       transition: {
         duration: 0.3,
-        ease: "easeOut"
+        ease: [0.25, 0.46, 0.45, 0.94]
       }
     }
   };
 
-  const chevronVariants = {
+  const chevronVariants: Variants = {
     collapsed: { rotate: 0 },
     expanded: { rotate: 180 }
   };
@@ -89,17 +89,17 @@ const MealCategorySection = ({
       animate="visible"
       className="w-full"
     >
-      <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden shadow-lg">
+      <div className="glass-card overflow-hidden shadow-2xl border border-white/20">
         {/* Category Header */}
         <div 
-          className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/10 transition-all duration-300"
+          className="flex items-center justify-between p-4 cursor-pointer hover:bg-white/5 transition-all duration-300 backdrop-blur-md"
           onClick={() => setIsExpanded(!isExpanded)}
         >
           <div className="flex items-center gap-3">
             <span className="text-2xl">{category.emoji}</span>
             <div>
               <h3 className="font-semibold text-white text-lg">{category.name}</h3>
-              <div className="flex items-center gap-1 text-sm text-gray-400">
+              <div className="flex items-center gap-1 text-sm text-gray-300">
                 <span className="text-[#ff4d4d] font-medium">{category.totalCalories} kcal</span>
                 <span>•</span>
                 <span>{mealEntries} {mealEntries === 1 ? 'entry' : 'entries'}</span>
@@ -112,7 +112,7 @@ const MealCategorySection = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="w-8 h-8 p-0 text-[#ff4d4d] hover:text-white hover:bg-[#ff4d4d]/20 border border-[#ff4d4d]/30 rounded-full"
+                className="w-8 h-8 p-0 text-[#ff4d4d] hover:text-white hover:bg-[#ff4d4d]/20 border border-[#ff4d4d]/30 rounded-full backdrop-blur-sm"
                 onClick={(e) => e.stopPropagation()}
               >
                 <Plus className="w-4 h-4" />
@@ -124,7 +124,7 @@ const MealCategorySection = ({
               animate={isExpanded ? "expanded" : "collapsed"}
               transition={{ duration: 0.3 }}
             >
-              <ChevronDown className="w-5 h-5 text-gray-400" />
+              <ChevronDown className="w-5 h-5 text-gray-300" />
             </motion.div>
           </div>
         </div>
@@ -139,12 +139,12 @@ const MealCategorySection = ({
               exit="collapsed"
               className="overflow-hidden"
             >
-              <div className="border-t border-white/10 bg-white/[0.02]">
+              <div className="border-t border-white/10 bg-black/10 backdrop-blur-md">
                 {category.meals.length === 0 ? (
                   <div className="p-6 text-center">
-                    <p className="text-gray-400 text-sm mb-3">No meals logged yet</p>
+                    <p className="text-gray-300 text-sm mb-3">No meals logged yet</p>
                     <Link to={`/add-meal?mealTime=${category.key}`}>
-                      <Button className="primary-button text-sm">
+                      <Button className="primary-button text-sm backdrop-blur-sm">
                         <Plus className="w-4 h-4 mr-2" />
                         Add {category.name}
                       </Button>
@@ -160,12 +160,12 @@ const MealCategorySection = ({
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -20, scale: 0.9 }}
                           transition={{ duration: 0.3, delay: mealIndex * 0.05 }}
-                          className="bg-white/5 rounded-lg p-3 border border-white/10 hover:bg-white/10 transition-all duration-200 group"
+                          className="glass-card p-3 border border-white/10 hover:bg-white/10 transition-all duration-200 group backdrop-blur-md"
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex-1">
                               <h4 className="font-medium text-white text-sm mb-1">{meal.name}</h4>
-                              <div className="flex items-center gap-1 text-xs text-gray-400">
+                              <div className="flex items-center gap-1 text-xs text-gray-300">
                                 <Clock className="w-3 h-3" />
                                 <span>
                                   {new Date(meal.logged_at).toLocaleTimeString('en-US', { 
@@ -181,7 +181,7 @@ const MealCategorySection = ({
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => onEditMeal(meal)}
-                                className="w-7 h-7 p-0 text-[#ff4d4d] hover:text-white hover:bg-[#ff4d4d]/20 border border-[#ff4d4d]/30"
+                                className="w-7 h-7 p-0 text-[#ff4d4d] hover:text-white hover:bg-[#ff4d4d]/20 border border-[#ff4d4d]/30 backdrop-blur-sm"
                               >
                                 <Edit className="w-3 h-3" />
                               </Button>
@@ -190,7 +190,7 @@ const MealCategorySection = ({
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => onDeleteMeal(meal.id, meal.name)}
-                                className="w-7 h-7 p-0 text-[#ff4d4d] hover:text-white hover:bg-[#ff4d4d]/20 border border-[#ff4d4d]/30"
+                                className="w-7 h-7 p-0 text-[#ff4d4d] hover:text-white hover:bg-[#ff4d4d]/20 border border-[#ff4d4d]/30 backdrop-blur-sm"
                               >
                                 <Trash2 className="w-3 h-3" />
                               </Button>
@@ -200,23 +200,23 @@ const MealCategorySection = ({
                           <div className="grid grid-cols-5 gap-2 text-xs">
                             <div className="text-center">
                               <div className="text-[#ff4d4d] font-semibold">{meal.calories}</div>
-                              <div className="text-gray-400">kcal</div>
+                              <div className="text-gray-300">kcal</div>
                             </div>
                             <div className="text-center">
                               <div className="text-white font-semibold">{Math.round(meal.protein || 0)}g</div>
-                              <div className="text-gray-400">protein</div>
+                              <div className="text-gray-300">protein</div>
                             </div>
                             <div className="text-center">
                               <div className="text-white font-semibold">{Math.round(meal.carbs || 0)}g</div>
-                              <div className="text-gray-400">carbs</div>
+                              <div className="text-gray-300">carbs</div>
                             </div>
                             <div className="text-center">
                               <div className="text-white font-semibold">{Math.round(meal.fat || 0)}g</div>
-                              <div className="text-gray-400">fats</div>
+                              <div className="text-gray-300">fats</div>
                             </div>
                             <div className="text-center">
                               <div className="text-white font-semibold">{Math.round(meal.fiber || 0)}g</div>
-                              <div className="text-gray-400">fiber</div>
+                              <div className="text-gray-300">fiber</div>
                             </div>
                           </div>
                         </motion.div>
