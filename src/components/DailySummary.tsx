@@ -66,20 +66,20 @@ const DailySummary = ({ calories, goal }: DailySummaryProps) => {
           </div>
           
           {/* Stats Grid */}
-          <div className="grid grid-cols-3 gap-4 mt-6">
-            <div className="bg-muted/10 rounded-lg p-4 border border-white/5">
-              <div className="text-xs text-blue-400 font-medium mb-1">Consumed</div>
-              <div className="text-2xl font-bold text-foreground">{calories.toLocaleString()}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+            <div className="bg-muted/10 rounded-lg p-4 border border-white/5 text-center">
+              <div className="text-xs text-blue-400 font-medium mb-2">Consumed</div>
+              <div className="text-2xl font-bold text-foreground leading-none">{calories.toLocaleString()}</div>
             </div>
             
-            <div className="bg-muted/10 rounded-lg p-4 border border-white/5">
-              <div className="text-xs text-green-400 font-medium mb-1">Goal</div>            
-              <div className="text-2xl font-bold text-foreground">{goal.toLocaleString()}</div>
+            <div className="bg-muted/10 rounded-lg p-4 border border-white/5 text-center">
+              <div className="text-xs text-green-400 font-medium mb-2">Goal</div>            
+              <div className="text-2xl font-bold text-foreground leading-none">{goal.toLocaleString()}</div>
             </div>
             
-            <div className="bg-muted/10 rounded-lg p-4 border border-white/5">
-              <div className="text-xs text-purple-400 font-medium mb-1">Left over</div>
-              <div className="text-2xl font-bold text-foreground">{remaining.toLocaleString()}</div>
+            <div className="bg-muted/10 rounded-lg p-4 border border-white/5 text-center">
+              <div className="text-xs text-purple-400 font-medium mb-2">Left over</div>
+              <div className="text-2xl font-bold text-foreground leading-none">{remaining.toLocaleString()}</div>
             </div>
           </div>
           
