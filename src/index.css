@@ -120,23 +120,14 @@
   }
   
   .seamless-meal-container {
-    @apply flex flex-col;
+    @apply flex flex-col gap-3;
   }
   
   .seamless-meal-card {
-    @apply backdrop-blur-xl border-0 border-t border-white/10 shadow-none;
+    @apply backdrop-blur-xl border-0 shadow-none rounded-xl;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border-radius: 0;
     transition: all 0.3s ease;
     position: relative;
-  }
-  
-  .seamless-meal-card:first-child {
-    @apply rounded-t-xl border-t-0;
-  }
-  
-  .seamless-meal-card:last-child {
-    @apply rounded-b-xl;
   }
   
   .seamless-meal-card:hover {
