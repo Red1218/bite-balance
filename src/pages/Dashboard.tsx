@@ -31,7 +31,7 @@ const Dashboard = () => {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="w-8 h-8 rounded-full animate-pulse mx-auto mb-4" style={{background:'#ff4d4d'}}></div>
-        <p className="text-gray-300 ml-3">Loading your meals...</p>
+        <p className="text-white ml-3">Loading your meals...</p>
       </div>
     );
   }
@@ -41,8 +41,8 @@ const Dashboard = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-gray-400">📅 {todayData.date}</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard</h1>
+          <p className="text-gray-300">📅 {todayData.date}</p>
         </div>
         <Link to="/add-meal">
           <Button className="button-accent shadow-2xl hover:scale-105">
@@ -62,7 +62,7 @@ const Dashboard = () => {
       >
         <h2 className="uppercase tracking-widest text-xs mb-1 font-semibold text-accent/90">Calorie Summary</h2>
         <span className="text-5xl font-bold text-white tracking-tight">{totals.calories || 0}</span>
-        <p className="text-lg text-gray-300">of <span className="font-semibold">{dailyGoal}</span> kcal</p>
+        <p className="text-lg text-gray-200">of <span className="font-semibold text-white">{dailyGoal}</span> kcal</p>
         <div className="w-full mt-4 bg-white/10 rounded-full overflow-hidden h-3">
           <motion.div
             className="h-3 rounded-full bg-accent"
@@ -107,14 +107,14 @@ const Dashboard = () => {
         transition={{ delay: 0.25, type: "spring", stiffness: 60 }}
       >
         <CardHeader className="pb-1 bg-transparent">
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-white">
             <span className="text-xl">🍽️</span> Today's Meals
           </CardTitle>
         </CardHeader>
         <CardContent>
           {meals.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-400 mb-4">No meals logged yet today!</p>
+              <p className="text-gray-300 mb-4">No meals logged yet today!</p>
               <Link to="/add-meal">
                 <Button className="button-accent hover:scale-105 duration-150">
                   <Plus className="w-4 h-4 mr-2" />
@@ -145,9 +145,9 @@ const Dashboard = () => {
                     className="flex items-center justify-between px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all shadow-sm border border-white/10 hover:scale-[1.012] duration-200"
                   >
                     <div className="flex-1">
-                      <h3 className="font-semibold">{meal.name}</h3>
-                      <p className="text-xs text-gray-400">{formatMealTime(meal.meal_time)}</p>
-                      <div className="flex gap-3 mt-2 text-xs text-gray-400">
+                      <h3 className="font-semibold text-white">{meal.name}</h3>
+                      <p className="text-xs text-gray-300">{formatMealTime(meal.meal_time)}</p>
+                      <div className="flex gap-3 mt-2 text-xs text-gray-300">
                         <span>P: {Math.round(meal.protein || 0)}g</span>
                         <span>C: {Math.round(meal.carbs || 0)}g</span>
                         <span>F: {Math.round(meal.fat || 0)}g</span>
@@ -155,7 +155,7 @@ const Dashboard = () => {
                     </div>
                     <div className="text-right mr-4 min-w-[65px]">
                       <span className="font-bold text-accent text-lg">{meal.calories}</span>
-                      <p className="text-xs text-gray-400">cal</p>
+                      <p className="text-xs text-gray-300">cal</p>
                     </div>
                     <div className="flex gap-2">
                       <Button
