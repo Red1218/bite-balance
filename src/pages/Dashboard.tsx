@@ -21,15 +21,6 @@ const Dashboard = () => {
   const dailyGoal = 2200;
   const progressPercentage = (totals.calories / dailyGoal) * 100;
 
-  // Anim helpers
-  const mealVariants = {
-    hidden: { opacity: 0, y: 30, scale: 0.98 },
-    visible: (i: number) => ({
-      opacity: 1, y: 0, scale: 1, transition: { delay: i * 0.07, type: "spring", stiffness: 200, damping: 24 }
-    }),
-    exit: { opacity: 0, x: 90, rotate: 1, transition: { duration: 0.16 } }
-  };
-
   const formatMealTime = (mealTime: string) => mealTime.charAt(0).toUpperCase() + mealTime.slice(1);
 
   const todayData = {
@@ -137,11 +128,19 @@ const Dashboard = () => {
                 {meals.map((meal, i) => (
                   <motion.div
                     key={meal.id}
-                    variants={mealVariants}
-                    custom={i}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
+                    initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                    animate={{ 
+                      opacity: 1, 
+                      y: 0, 
+                      scale: 1,
+                      transition: { 
+                        delay: i * 0.07, 
+                        type: "spring", 
+                        stiffness: 200, 
+                        damping: 24 
+                      }
+                    }}
+                    exit={{ opacity: 0, x: 90, rotate: 1, transition: { duration: 0.16 } }}
                     layout
                     className="flex items-center justify-between px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all shadow-sm border border-white/10 hover:scale-[1.012] duration-200"
                   >
