@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Edit, Trash2, Utensils, Calendar } from "lucide-react";
+import { Plus, Edit, Trash2, Utensils, Calendar, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useDailyMeals } from "@/hooks/useDailyMeals";
@@ -58,6 +58,57 @@ const Dashboard = () => {
     })
   };
 
+  // Group meals by meal_time and calculate totals
+  const groupedMeals = meals.reduce((acc, meal) => {
+    const mealTime = meal.meal_time || 'snack';
+    if (!acc[mealTime]) {
+      acc[mealTime] = {
+        meals: [],
+        totalCalories: 0,
+        totalProtein: 0,
+        totalCarbs: 0,
+        totalFat: 0
+      };
+    }
+    acc[mealTime].meals.push(meal);
+    acc[mealTime].totalCalories += meal.calories || 0;
+    acc[mealTime].totalProtein += meal.protein || 0;
+    acc[mealTime].totalCarbs += meal.carbs || 0;
+    acc[mealTime].totalFat += meal.fat || 0;
+    return acc;
+  }, {} as any);
+
+  const mealCategories = [
+    { 
+      key: 'breakfast', 
+      name: 'Breakfast', 
+      icon: '🌅',
+      bgGradient: 'from-orange-500/20 to-red-500/20',
+      iconBg: 'bg-orange-500'
+    },
+    { 
+      key: 'lunch', 
+      name: 'Lunch', 
+      icon: '🌞',
+      bgGradient: 'from-yellow-500/20 to-orange-500/20',
+      iconBg: 'bg-yellow-500'
+    },
+    { 
+      key: 'dinner', 
+      name: 'Dinner', 
+      icon: '🌙',
+      bgGradient: 'from-blue-500/20 to-purple-500/20',
+      iconBg: 'bg-blue-500'
+    },
+    { 
+      key: 'snack', 
+      name: 'Snacks', 
+      icon: '🍎',
+      bgGradient: 'from-green-500/20 to-emerald-500/20',
+      iconBg: 'bg-green-500'
+    }
+  ];
+
   if (loading) {
     return (
       <div className="space-y-6 max-w-full px-2 sm:px-4">
@@ -103,7 +154,7 @@ const Dashboard = () => {
         {/* Daily Summary */}
         <DailySummary calories={totals.calories} goal={dailyGoal} />
 
-        {/* Today's Meals */}
+        {/* Today's Meals - New Design */}
         <Card className="metric-card animate-fade-in-up" style={{ animationDelay: '200ms' }}>
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
@@ -111,8 +162,111 @@ const Dashboard = () => {
               Today's Meals
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            {meals.length === 0 ? (
+          <CardContent className="space-y-4">
+            {mealCategories.map((category, categoryIndex) => {
+              const categoryData = groupedMeals[category.key];
+              const hasEntries = categoryData && categoryData.meals.length > 0;
+              
+              return (
+                <div 
+                  key={category.key}
+                  className={`rounded-2xl p-4 bg-gradient-to-br ${category.bgGradient} border border-white/10`}
+                  style={{ animationDelay: `${categoryIndex * 100}ms` }}
+                >
+                  {/* Category Header */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 ${category.iconBg} rounded-full flex items-center justify-center text-white text-lg`}>
+                        {category.icon}
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-semibold text-foreground">{category.name}</h3>
+                        <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                          <Utensils className="w-3 h-3" />
+                          <span>{hasEntries ? categoryData.totalCalories : 0} kcal</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">
+                        {hasEntries ? categoryData.meals.length : 0} entries
+                      </span>
+                      <Link to="/add-meal">
+                        <Button size="sm" variant="ghost" className="w-8 h-8 p-0 hover:bg-white/20">
+                          <Plus className="w-4 h-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Meal Items */}
+                  {hasEntries ? (
+                    <div className="space-y-3">
+                      {categoryData.meals.map((meal: any, mealIndex: number) => (
+                        <div 
+                          key={meal.id}
+                          className="bg-background/40 backdrop-blur-sm rounded-xl p-3 border border-white/10"
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <h4 className="font-medium text-foreground">{meal.name}</h4>
+                            <div className="flex items-center gap-2">
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <Clock className="w-3 h-3" />
+                                <span>{new Date(meal.logged_at).toLocaleTimeString('en-US', { 
+                                  hour: '2-digit', 
+                                  minute: '2-digit' 
+                                })}</span>
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleEditMeal(meal)}
+                                className="w-6 h-6 p-0 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10"
+                              >
+                                <Edit className="w-3 h-3" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteMeal(meal.id, meal.name)}
+                                className="w-6 h-6 p-0 text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </Button>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-4 gap-4 text-center">
+                            <div>
+                              <div className="text-lg font-bold text-orange-400">{meal.calories}</div>
+                              <div className="text-xs text-muted-foreground">kcal</div>
+                            </div>
+                            <div>
+                              <div className="text-lg font-bold text-red-400">{Math.round(meal.protein || 0)} g</div>
+                              <div className="text-xs text-muted-foreground">protein</div>
+                            </div>
+                            <div>
+                              <div className="text-lg font-bold text-blue-400">{Math.round(meal.carbs || 0)} g</div>
+                              <div className="text-xs text-muted-foreground">carbs</div>
+                            </div>
+                            <div>
+                              <div className="text-lg font-bold text-yellow-400">{Math.round(meal.fat || 0)} g</div>
+                              <div className="text-xs text-muted-foreground">fat</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-6 text-muted-foreground">
+                      <span className="text-sm">No entries yet</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            {meals.length === 0 && (
               <div className="text-center py-8 sm:py-12">
                 <div className="w-12 h-12 sm:w-16 sm:h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Utensils className="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />
@@ -124,54 +278,6 @@ const Dashboard = () => {
                     Add Your First Meal
                   </Button>
                 </Link>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {meals.map((meal, index) => (
-                  <div 
-                    key={meal.id} 
-                    className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-muted/20 rounded-lg hover:bg-muted/30 transition-all duration-200 border border-white/5 gap-3 sm:gap-0"
-                    style={{ 
-                      animationDelay: `${index * 100}ms`,
-                      animationFillMode: 'both'
-                    }}
-                  >
-                    <div className="flex-1">
-                      <h3 className="font-medium text-foreground text-sm sm:text-base">{meal.name}</h3>
-                      <p className="text-xs sm:text-sm text-muted-foreground">{formatMealTime(meal.meal_time)}</p>
-                      <div className="flex gap-3 sm:gap-4 mt-2 text-xs text-muted-foreground">
-                        <span>P: {Math.round(meal.protein || 0)}g</span>
-                        <span>C: {Math.round(meal.carbs || 0)}g</span>
-                        <span>F: {Math.round(meal.fat || 0)}g</span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between sm:justify-end gap-4">
-                      <div className="text-right">
-                        <span className="font-bold text-primary text-lg sm:text-xl">{meal.calories}</span>
-                        <p className="text-xs sm:text-sm text-muted-foreground">calories</p>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleEditMeal(meal)}
-                          className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 transition-all duration-200 hover:scale-110"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => handleDeleteMeal(meal.id, meal.name)}
-                          className="text-red-400 hover:text-red-300 hover:bg-red-400/10 transition-all duration-200 hover:scale-110"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </CardContent>
