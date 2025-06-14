@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Plus, Edit, Trash2, Utensils, Calendar, Clock } from "lucide-react";
@@ -83,29 +82,29 @@ const Dashboard = () => {
       key: 'breakfast', 
       name: 'Breakfast', 
       icon: '🌅',
-      bgGradient: 'from-orange-500/20 to-red-500/20',
-      iconBg: 'bg-orange-500'
+      bgGradient: 'from-red-500/10 to-red-600/20',
+      iconBg: 'bg-red-500'
     },
     { 
       key: 'lunch', 
       name: 'Lunch', 
       icon: '🌞',
-      bgGradient: 'from-yellow-500/20 to-orange-500/20',
-      iconBg: 'bg-yellow-500'
+      bgGradient: 'from-red-400/10 to-red-500/20',
+      iconBg: 'bg-red-600'
     },
     { 
       key: 'dinner', 
       name: 'Dinner', 
       icon: '🌙',
-      bgGradient: 'from-blue-500/20 to-purple-500/20',
-      iconBg: 'bg-blue-500'
+      bgGradient: 'from-red-600/10 to-red-700/20',
+      iconBg: 'bg-red-700'
     },
     { 
       key: 'snack', 
       name: 'Snacks', 
       icon: '🍎',
-      bgGradient: 'from-green-500/20 to-emerald-500/20',
-      iconBg: 'bg-green-500'
+      bgGradient: 'from-red-300/10 to-red-400/20',
+      iconBg: 'bg-red-400'
     }
   ];
 
@@ -170,7 +169,7 @@ const Dashboard = () => {
               return (
                 <div 
                   key={category.key}
-                  className={`rounded-2xl p-4 bg-gradient-to-br ${category.bgGradient} border border-white/10`}
+                  className={`rounded-2xl p-4 bg-gradient-to-br ${category.bgGradient} border border-red-500/20`}
                   style={{ animationDelay: `${categoryIndex * 100}ms` }}
                 >
                   {/* Category Header */}
@@ -192,7 +191,7 @@ const Dashboard = () => {
                         {hasEntries ? categoryData.meals.length : 0} entries
                       </span>
                       <Link to="/add-meal">
-                        <Button size="sm" variant="ghost" className="w-8 h-8 p-0 hover:bg-white/20">
+                        <Button size="sm" variant="ghost" className="w-8 h-8 p-0 hover:bg-red-500/20">
                           <Plus className="w-4 h-4" />
                         </Button>
                       </Link>
@@ -205,7 +204,7 @@ const Dashboard = () => {
                       {categoryData.meals.map((meal: any, mealIndex: number) => (
                         <div 
                           key={meal.id}
-                          className="bg-background/40 backdrop-blur-sm rounded-xl p-3 border border-white/10"
+                          className="bg-background/40 backdrop-blur-sm rounded-xl p-3 border border-red-500/10"
                         >
                           <div className="flex items-center justify-between mb-2">
                             <h4 className="font-medium text-foreground">{meal.name}</h4>
@@ -221,7 +220,7 @@ const Dashboard = () => {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => handleEditMeal(meal)}
-                                className="w-6 h-6 p-0 text-blue-400 hover:text-blue-300 hover:bg-blue-400/10"
+                                className="w-6 h-6 p-0 text-red-400 hover:text-red-300 hover:bg-red-400/10"
                               >
                                 <Edit className="w-3 h-3" />
                               </Button>
@@ -229,7 +228,7 @@ const Dashboard = () => {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => handleDeleteMeal(meal.id, meal.name)}
-                                className="w-6 h-6 p-0 text-red-400 hover:text-red-300 hover:bg-red-400/10"
+                                className="w-6 h-6 p-0 text-red-500 hover:text-red-400 hover:bg-red-500/10"
                               >
                                 <Trash2 className="w-3 h-3" />
                               </Button>
@@ -238,19 +237,19 @@ const Dashboard = () => {
                           
                           <div className="grid grid-cols-4 gap-4 text-center">
                             <div>
-                              <div className="text-lg font-bold text-orange-400">{meal.calories}</div>
+                              <div className="text-lg font-bold text-red-400">{meal.calories}</div>
                               <div className="text-xs text-muted-foreground">kcal</div>
                             </div>
                             <div>
-                              <div className="text-lg font-bold text-red-400">{Math.round(meal.protein || 0)} g</div>
+                              <div className="text-lg font-bold text-red-500">{Math.round(meal.protein || 0)} g</div>
                               <div className="text-xs text-muted-foreground">protein</div>
                             </div>
                             <div>
-                              <div className="text-lg font-bold text-blue-400">{Math.round(meal.carbs || 0)} g</div>
+                              <div className="text-lg font-bold text-red-300">{Math.round(meal.carbs || 0)} g</div>
                               <div className="text-xs text-muted-foreground">carbs</div>
                             </div>
                             <div>
-                              <div className="text-lg font-bold text-yellow-400">{Math.round(meal.fat || 0)} g</div>
+                              <div className="text-lg font-bold text-red-600">{Math.round(meal.fat || 0)} g</div>
                               <div className="text-xs text-muted-foreground">fat</div>
                             </div>
                           </div>
