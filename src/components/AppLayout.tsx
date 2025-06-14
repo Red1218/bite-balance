@@ -6,13 +6,9 @@ import Sidebar from './Sidebar';
 const AppLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   return (
-    <div className="flex min-h-screen">
-      <Sidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
+    <div className="flex min-h-screen bg-gray-50">
+      <Sidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
       <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'md:ml-16'} pt-16 md:pt-8 px-4 md:px-8 pb-8`}>
         <Outlet />
       </main>
