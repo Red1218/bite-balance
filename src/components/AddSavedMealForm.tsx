@@ -26,6 +26,7 @@ const AddSavedMealForm: React.FC<AddSavedMealFormProps> = ({ onMealAdded, onCanc
     protein: '',
     carbs: '',
     fat: '',
+    fiber: '',
     notes: '',
     tagInput: ''
   });
@@ -75,6 +76,7 @@ const AddSavedMealForm: React.FC<AddSavedMealFormProps> = ({ onMealAdded, onCanc
           protein: Number(formData.protein) || 0,
           carbs: Number(formData.carbs) || 0,
           fat: Number(formData.fat) || 0,
+          fiber: Number(formData.fiber) || 0,
           tags: tags.length > 0 ? tags : null,
           notes: formData.notes || null
         });
@@ -140,7 +142,7 @@ const AddSavedMealForm: React.FC<AddSavedMealFormProps> = ({ onMealAdded, onCanc
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label htmlFor="protein">Protein (g)</Label>
               <Input
@@ -171,6 +173,17 @@ const AddSavedMealForm: React.FC<AddSavedMealFormProps> = ({ onMealAdded, onCanc
                 step="0.1"
                 value={formData.fat}
                 onChange={(e) => setFormData({ ...formData, fat: e.target.value })}
+                placeholder="0"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="fiber">Fiber (g)</Label>
+              <Input
+                id="fiber"
+                type="number"
+                step="0.1"
+                value={formData.fiber}
+                onChange={(e) => setFormData({ ...formData, fiber: e.target.value })}
                 placeholder="0"
               />
             </div>

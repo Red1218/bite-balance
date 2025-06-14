@@ -12,6 +12,7 @@ interface MealItem {
   protein: number;
   carbs: number;
   fat: number;
+  fiber?: number;
   meal_time: string;
   logged_at: string;
 }
@@ -50,7 +51,7 @@ const MealCategorySection = ({
       transition: {
         duration: 0.4,
         delay: index * 0.1,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        ease: "easeOut"
       }
     }
   };
@@ -61,7 +62,7 @@ const MealCategorySection = ({
       opacity: 0,
       transition: {
         duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        ease: "easeOut"
       }
     },
     expanded: {
@@ -69,7 +70,7 @@ const MealCategorySection = ({
       opacity: 1,
       transition: {
         duration: 0.3,
-        ease: [0.25, 0.46, 0.45, 0.94]
+        ease: "easeOut"
       }
     }
   };
@@ -196,7 +197,7 @@ const MealCategorySection = ({
                             </div>
                           </div>
                           
-                          <div className="grid grid-cols-4 gap-2 text-xs">
+                          <div className="grid grid-cols-5 gap-2 text-xs">
                             <div className="text-center">
                               <div className="text-[#ff4d4d] font-semibold">{meal.calories}</div>
                               <div className="text-gray-400">kcal</div>
@@ -212,6 +213,10 @@ const MealCategorySection = ({
                             <div className="text-center">
                               <div className="text-white font-semibold">{Math.round(meal.fat || 0)}g</div>
                               <div className="text-gray-400">fats</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-white font-semibold">{Math.round(meal.fiber || 0)}g</div>
+                              <div className="text-gray-400">fiber</div>
                             </div>
                           </div>
                         </motion.div>

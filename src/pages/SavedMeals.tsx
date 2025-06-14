@@ -160,7 +160,7 @@ const SavedMeals = () => {
                 <p className="text-sm text-gray-600">calories</p>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 text-center text-sm">
+              <div className="grid grid-cols-4 gap-2 text-center text-sm">
                 <div>
                   <div className="font-semibold text-red-500">{Math.round(meal.protein || 0)}g</div>
                   <div className="text-gray-600">Protein</div>
@@ -172,6 +172,10 @@ const SavedMeals = () => {
                 <div>
                   <div className="font-semibold text-yellow-500">{Math.round(meal.fat || 0)}g</div>
                   <div className="text-gray-600">Fat</div>
+                </div>
+                <div>
+                  <div className="font-semibold text-green-500">{Math.round(meal.fiber || 0)}g</div>
+                  <div className="text-gray-600">Fiber</div>
                 </div>
               </div>
 
